@@ -1229,8 +1229,10 @@
 				"count": "[parameters('masterInstanceCount')]"
 			},
 			"properties": {
-				"publisher": "Microsoft.Azure.Extensions",
-				"type": "CustomScript",
+
+  "publisher": "Microsoft.OSTCExtensions",
+        "type": "CustomScriptForLinux",
+        "typeHandlerVersion": "1.4",
 				"autoUpgradeMinorVersion": true,
 				"settings": {
 					"fileUris": [
@@ -1257,8 +1259,11 @@
 				"count": "[parameters('infraInstanceCount')]"
 			},
 			"properties": {
-				"publisher": "Microsoft.Azure.Extensions",
-				"type": "CustomScript",
+
+  "publisher": "Microsoft.OSTCExtensions",
+        "type": "CustomScriptForLinux",
+        "typeHandlerVersion": "1.4",
+
 				"autoUpgradeMinorVersion": true,
 				"settings": {
 					"fileUris": [
@@ -1285,8 +1290,10 @@
 				"count": "[parameters('nodeInstanceCount')]"
 			},
 			"properties": {
-				"publisher": "Microsoft.Azure.Extensions",
-				"type": "CustomScript",
+  "publisher": "Microsoft.OSTCExtensions",
+        "type": "CustomScriptForLinux",
+        "typeHandlerVersion": "1.4",
+
 				"autoUpgradeMinorVersion": true,
 				"settings": {
 					"fileUris": [
