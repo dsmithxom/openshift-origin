@@ -119,20 +119,6 @@ EOF
 
 # Run on MASTER-0 - configure Storage Class
 
-cat > /home/${SUDOUSER}/configurestorageclass.yml <<EOF
----
-- hosts: master0
-  gather_facts: no
-  remote_user: ${SUDOUSER}
-  become: yes
-  become_method: sudo
-  vars:
-    description: "Create Storage Class"
-  tasks:
-  - name: Create Storage Class with StorageAccountPV1
-    shell: oc create -f /home/${SUDOUSER}/scgeneric1.yml
-EOF
-
 # Create vars.yml file for use by setup-azure-config.yml playbook
 
 cat > /home/${SUDOUSER}/vars.yml <<EOF
@@ -144,193 +130,13 @@ g_resourceGroup: $RESOURCEGROUP
 g_location: $LOCATION
 EOF
 
-# Create Azure Cloud Provider configuration Playbook for Master Config
 
-cat > /home/${SUDOUSER}/setup-azure-master.yml <<EOF
-#!/usr/bin/ansible-playbook 
-- hosts: masters
-  gather_facts: no
-  serial: 1
-  vars_files:
-  - vars.yml
-  become: yes
-  vars:
-    azure_conf_dir: /etc/azure
-    azure_conf: "{{ azure_conf_dir }}/azure.conf"
-    master_conf: /etc/origin/master/master-config.yaml
-  handlers:
-  - name: restart origin-master-api
-    systemd:
-      state: restarted
-      name: origin-master-api
-
-  - name: restart origin-master-controllers
-    systemd:
-      state: restarted
-      name: origin-master-controllers
-
-  post_tasks:
-  - name: make sure /etc/azure exists
-    file:
-      state: directory
-      path: "{{ azure_conf_dir }}"
-
-  - name: populate /etc/azure/azure.conf
-    copy:
-      dest: "{{ azure_conf }}"
-      content: |
-        {
-          "aadClientID" : "{{ g_aadClientId }}",
-          "aadClientSecret" : "{{ g_aadClientSecret }}",
-          "subscriptionID" : "{{ g_subscriptionId }}",
-          "tenantID" : "{{ g_tenantId }}",
-          "resourceGroup": "{{ g_resourceGroup }}",
-        } 
-    notify:
-    - restart origin-master-api
-    - restart origin-master-controllers
-
-  - name: insert the azure disk config into the master
-    modify_yaml:
-      dest: "{{ master_conf }}"
-      yaml_key: "{{ item.key }}"
-      yaml_value: "{{ item.value }}"
-    with_items:
-    - key: kubernetesMasterConfig.apiServerArguments.cloud-config
-      value:
-      - "{{ azure_conf }}"
-
-    - key: kubernetesMasterConfig.apiServerArguments.cloud-provider
-      value:
-      - azure
-
-    - key: kubernetesMasterConfig.controllerArguments.cloud-config
-      value:
-      - "{{ azure_conf }}"
-
-    - key: kubernetesMasterConfig.controllerArguments.cloud-provider
-      value:
-      - azure
-    notify:
-    - restart origin-master-api
-    - restart origin-master-controllers
-EOF
 
 # Create Azure Cloud Provider configuration Playbook for Node Config (Master Nodes)
 
-cat > /home/${SUDOUSER}/setup-azure-node-master.yml <<EOF
-#!/usr/bin/ansible-playbook 
-- hosts: masters
-  serial: 1
-  gather_facts: no
-  vars_files:
-  - vars.yml
-  become: yes
-  vars:
-    azure_conf_dir: /etc/azure
-    azure_conf: "{{ azure_conf_dir }}/azure.conf"
-    node_conf: /etc/origin/node/node-config.yaml
-  handlers:
-  - name: restart origin-node
-    systemd:
-      state: restarted
-      name: origin-node
-  post_tasks:
-  - name: make sure /etc/azure exists
-    file:
-      state: directory
-      path: "{{ azure_conf_dir }}"
-
-  - name: populate /etc/azure/azure.conf
-    copy:
-      dest: "{{ azure_conf }}"
-      content: |
-        {
-          "aadClientID" : "{{ g_aadClientId }}",
-          "aadClientSecret" : "{{ g_aadClientSecret }}",
-          "subscriptionID" : "{{ g_subscriptionId }}",
-          "tenantID" : "{{ g_tenantId }}",
-          "resourceGroup": "{{ g_resourceGroup }}",
-        } 
-    notify:
-    - restart origin-node
-  - name: insert the azure disk config into the node
-    modify_yaml:
-      dest: "{{ node_conf }}"
-      yaml_key: "{{ item.key }}"
-      yaml_value: "{{ item.value }}"
-    with_items:
-    - key: kubeletArguments.cloud-config
-      value:
-      - "{{ azure_conf }}"
-
-    - key: kubeletArguments.cloud-provider
-      value:
-      - azure
-    notify:
-    - restart origin-node
-EOF
 
 # Create Azure Cloud Provider configuration Playbook for Node Config (Non-Master Nodes)
 
-cat > /home/${SUDOUSER}/setup-azure-node.yml <<EOF
-#!/usr/bin/ansible-playbook 
-- hosts: nodes:!masters
-  serial: 1
-  gather_facts: no
-  vars_files:
-  - vars.yml
-  become: yes
-  vars:
-    azure_conf_dir: /etc/azure
-    azure_conf: "{{ azure_conf_dir }}/azure.conf"
-    node_conf: /etc/origin/node/node-config.yaml
-  handlers:
-  - name: restart origin-node
-    systemd:
-      state: restarted
-      name: origin-node
-  post_tasks:
-  - name: make sure /etc/azure exists
-    file:
-      state: directory
-      path: "{{ azure_conf_dir }}"
-
-  - name: populate /etc/azure/azure.conf
-    copy:
-      dest: "{{ azure_conf }}"
-      content: |
-        {
-          "aadClientID" : "{{ g_aadClientId }}",
-          "aadClientSecret" : "{{ g_aadClientSecret }}",
-          "subscriptionID" : "{{ g_subscriptionId }}",
-          "tenantID" : "{{ g_tenantId }}",
-          "resourceGroup": "{{ g_resourceGroup }}",
-        } 
-    notify:
-    - restart origin-node
-  - name: insert the azure disk config into the node
-    modify_yaml:
-      dest: "{{ node_conf }}"
-      yaml_key: "{{ item.key }}"
-      yaml_value: "{{ item.value }}"
-    with_items:
-    - key: kubeletArguments.cloud-config
-      value:
-      - "{{ azure_conf }}"
-
-    - key: kubeletArguments.cloud-provider
-      value:
-      - azure
-    notify:
-    - restart origin-node
-  - name: delete the node so it can recreate itself
-    command: oc delete node {{inventory_hostname}}
-    delegate_to: ${MASTER}-0
-  - name: sleep to let node come back to life
-    pause:
-       seconds: 90
-EOF
 
 # Create Playbook to delete stuck Master nodes and set as not schedulable
 
@@ -500,10 +306,6 @@ sleep 120
 # Execute setup-azure-master and setup-azure-node playbooks to configure Azure Cloud Provider
 echo $(date) "- Configuring OpenShift Cloud Provider to be Azure"
 
-runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-master.yml"
-runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node-master.yml"
-runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node.yml"
-runuser -l $SUDOUSER -c "ansible-playbook ~/deletestucknodes.yml"
 
 # Delete postinstall files
 echo $(date) "- Deleting post installation files"
@@ -513,9 +315,5 @@ rm /home/${SUDOUSER}/addocpuser.yml
 rm /home/${SUDOUSER}/assignclusteradminrights.yml
 rm /home/${SUDOUSER}/dockerregistry.yml
 rm /home/${SUDOUSER}/vars.yml
-rm /home/${SUDOUSER}/setup-azure-master.yml
-rm /home/${SUDOUSER}/setup-azure-node-master.yml
-rm /home/${SUDOUSER}/setup-azure-node.yml
-rm /home/${SUDOUSER}/deletestucknodes.yml
 
 echo $(date) " - Script complete"
