@@ -211,7 +211,7 @@
 		"location": "[resourceGroup().location]",
 		"resourceGroupName": "[resourceGroup().id]",
 		"apiVersionCompute": "2015-06-15",
-		"apiVersionNetwork": "2016-03-30",
+		"apiVersionNetwork": "2015-06-15",
 		"apiVersionStorage": "2015-06-15",
 		"apiVersionLinkTemplate": "2015-01-01",
 		"namingInfix": "[toLower(parameters('openshiftClusterPrefix'))]",
@@ -1320,7 +1320,7 @@
 						"value": "[variables('osImage')]"
 					},
 					"hostname": {
-						"value": "[concat(variables('openshiftInfraHostname'), '-', copyIndex())]"
+						"value": "[concat(variables('openshiftGlusterHostname'), '-', copyIndex())]"
 					},
 					"newStorageAccountOs": {
 						"value": "[variables('newStorageAccountGluster')]"

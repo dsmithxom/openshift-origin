@@ -104,7 +104,7 @@
 			"offer": "RHEL",
 			"sku": "7-RAW",
 			"version": "latest"
-		},
+		}
 	},
 	"resources": [{
 		"type": "Microsoft.Compute/virtualMachines",
