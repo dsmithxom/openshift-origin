@@ -26,10 +26,12 @@ RESOURCEGROUP=${19}
 LOCATION=${20}
 STORAGEACCOUNT1=${21}
 SAKEY1=${22}
+GLUSTERCOUNT0${23}
 
 MASTERLOOP=$((MASTERCOUNT - 1))
 INFRALOOP=$((INFRACOUNT - 1))
 NODELOOP=$((NODECOUNT - 1))
+GLUSTERLOOP=$((GLUSTERCOUNT - 1))
 
 # Generate private keys for use by Ansible
 echo $(date) " - Generating Private keys for use by Ansible for OpenShift Installation"
@@ -168,6 +170,8 @@ nodes
 etcd
 master0
 new_nodes
+glusterfs
+
 
 # Set variables common for all OSEv3 hosts
 [OSEv3:vars]
@@ -198,6 +202,10 @@ openshift_master_cluster_public_vip=$MASTERPUBLICIPADDRESS
 # Enable HTPasswdPasswordIdentityProvider
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
 
+# Enable CNS (glusterfs) as default storage provider
+openshift_storage_glusterfs_namespace=glusterfs
+openshift_storage_glusterfs_name=storage
+
 # host group for masters
 [masters]
 $MASTER-[0:${MASTERLOOP}]
@@ -208,6 +216,9 @@ $MASTER-[0:${MASTERLOOP}]
 
 [master0]
 $MASTER-0
+[glusterfs]
+$MASTER-[0:${GLUSTERLOOP}] 
+
 
 # host group for nodes
 [nodes]
@@ -227,6 +238,10 @@ do
   echo "$INFRA-$c openshift_node_labels=\"{'type': 'infra', 'zone': 'default'}\" openshift_hostname=$INFRA-$c" >> /etc/ansible/hosts
 done
 
+for (( c=0; c<$GLUSTERCOUNT; c++ ))
+do
+  echo "$GLUSTER-$c openshift_node_labels=\"{'type': 'infra', 'zone': 'default'}\" glusterfs_devices='[ "/dev/sdd" ]' openshift_hostname=$GLUSTER-$c" >> /etc/ansible/hosts
+done
 # Loop to add Nodes
 
 for (( c=0; c<$NODECOUNT; c++ ))
@@ -292,7 +307,7 @@ runuser -l $SUDOUSER -c "ansible-playbook ~/assignclusteradminrights.yml"
 # Create Storage Class
 echo $(date) "- Creating Storage Class"
 
-runuser -l $SUDOUSER -c "ansible-playbook ~/configurestorageclass.yml"
+#runuser -l $SUDOUSER -c "ansible-playbook ~/configurestorageclass.yml"
 
 # Configure Docker Registry to use Azure Storage Account
 echo $(date) "- Configuring Docker Registry to use Azure Storage Account"

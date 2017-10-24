@@ -107,6 +107,14 @@
 				"description": "Number of OpenShift infra nodes."
 			}
 		},
+		"glusterInstanceCount": {
+			"type": "int",
+			"defaultValue": 2,
+			"allowedValues": [2, 3],
+			"metadata": {
+				"description": "Number of OpenShift gluster nodes."
+			}
+		},	
 		"nodeInstanceCount": {
 			"type": "int",
 			"defaultValue": 1,
@@ -210,8 +218,10 @@
 		"openshiftMasterHostname": "[concat(variables('namingInfix'), '-master')]",
 		"openshiftNodeHostname": "[concat(variables('namingInfix'), '-node')]",
 		"openshiftInfraHostname": "[concat(variables('namingInfix'), '-infra')]",
+		"openshiftGlusterHostname": "[concat(variables('namingInfix'), '-gluster')]",
 		"newStorageAccountMaster": "[concat('master', uniqueString(concat(resourceGroup().id, 'msa')))]",
 		"newStorageAccountInfra": "[concat('infra', uniqueString(concat(resourceGroup().id, 'infra')))]",
+		"newStorageAccountGluster": "[concat('gluster', uniqueString(concat(resourceGroup().id, 'gluster')))]",
 		"newStorageAccountNodeOs": "[concat('nodeos', uniqueString(concat(resourceGroup().id, 'nodeossa')))]",
 		"newStorageAccountNodeData": "[concat('nodedata', uniqueString(concat(resourceGroup().id, 'nodedatasa')))]",
 		"newStorageAccountRegistry": "[concat('registry', uniqueString(concat(resourceGroup().id, 'registry')))]",
@@ -260,7 +270,9 @@
 		"masterPrepScriptUrl": "[concat(parameters('_artifactsLocation'), 'scripts/masterPrep.sh')]",
 		"nodePrepScriptFileName": "nodePrep.sh",
 		"masterPrepScriptFileName": "masterPrep.sh",
-		"clusterNodeDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), 'nested/clusternode.json')]",
+		"clusterNodeDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), 'nested/clusternodestack.json')]",
+		"glusterNodeDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), 'nested/glusternodestack.json')]",
+		
 		"openshiftDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), 'nested/openshiftdeploy.json')]",
 		"vmSizesMap": {
 			"Standard_A4": {
@@ -686,6 +698,18 @@
 			"properties": {
 				"accountType": "[variables('vmSizesMap')[parameters('infraVmSize')].storageAccountType]"
 			}
+		},
+		{
+			"type": "Microsoft.Storage/storageAccounts",
+			"name": "[variables('newStorageAccountGluster')]",
+			"location": "[variables('location')]",
+			"apiVersion": "[variables('apiVersionStorage')]",
+			"tags": {
+				"displayName": "InfraStorageAccount"
+			},
+			"properties": {
+				"accountType": "[variables('vmSizesMap')[parameters('nodeVmSize')].storageAccountType]"
+			}
 		}, {
 			"type": "Microsoft.Storage/storageAccounts",
 			"name": "[variables('newStorageAccountNodeOs')]",
@@ -767,6 +791,12 @@
 		}, {
 			"type": "Microsoft.Compute/availabilitySets",
 			"name": "infraavailabilityset",
+			"location": "[variables('location')]",
+			"apiVersion": "[variables('apiVersionCompute')]",
+			"properties": {}
+		},{
+			"type": "Microsoft.Compute/availabilitySets",
+			"name": "glusteravailabilityset",
 			"location": "[variables('location')]",
 			"apiVersion": "[variables('apiVersionCompute')]",
 			"properties": {}
@@ -999,7 +1029,38 @@
 					"id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('openshiftInfraHostname'), '-nsg'))]"
 				}
 			}
-		}, {
+		},{
+			"type": "Microsoft.Network/networkInterfaces",
+			"name": "[concat(variables('openshiftGlusterHostname'), '-', copyIndex(), '-nic')]",
+			"location": "[variables('location')]",
+			"apiVersion": "[variables('apiVersionNetwork')]",
+			"tags": {
+				"displayName": "OpenShiftGlusterNetworkInterfaces"
+			},
+			"dependsOn": [
+				"[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]",
+				"[concat('Microsoft.Network/networkSecurityGroups/', variables('openshiftGlusterHostname'), '-nsg')]"
+			],
+			"copy": {
+				"name": "glusterNicLoop",
+				"count": "[parameters('glusterInstanceCount')]"
+			},
+			"properties": {
+				"ipConfigurations": [{
+					"name": "[concat(variables('openshiftGlusterHostname'), copyIndex(), 'ipconfig')]",
+					"properties": {
+						"privateIPAllocationMethod": "Dynamic",
+						"subnet": {
+							"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('masterSubnetName'))]"
+						}
+					}
+				}],
+				"networkSecurityGroup": {
+					"id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('openshiftNodeHostname'), '-nsg'))]"
+				}
+			}
+		}
+		, {
 			"type": "Microsoft.Network/networkInterfaces",
 			"name": "[concat(variables('openshiftNodeHostname'), '-', copyIndex(), '-nic')]",
 			"location": "[variables('location')]",
@@ -1213,7 +1274,70 @@
 					}
 				}
 			}
-		}, {
+		},
+		{
+			"name": "[concat('glusterVmDeployment', copyindex())]",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "[variables('apiVersionLinkTemplate')]",
+			"dependsOn": [
+				"[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountGluster'))]",
+				"glusterNicLoop",
+				"glusteravailabilityset"
+			],
+			"copy": {
+				"name": "glusterVmLoop",
+				"count": "[parameters('glusterInstanceCount')]"
+			},
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('glusterNodeDeploymentTemplateUrl')]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"location": {
+						"value": "[variables('location')]"
+					},
+					"sshKeyPath": {
+						"value": "[variables('sshKeyPath')]"
+					},
+					"sshPublicKey": {
+						"value": "[parameters('sshPublicKey')]"
+					},
+					"dataDiskSize": {
+						"value": "[parameters('dataDiskSize')]"
+					},
+					"adminUsername": {
+						"value": "[parameters('adminUsername')]"
+					},
+					"vmSize": {
+						"value": "[parameters('infraVmSize')]"
+					},
+					"availabilitySet": {
+						"value": "glusteravailabilityset"
+					},
+					"osImage": {
+						"value": "[variables('osImage')]"
+					},
+					"hostname": {
+						"value": "[concat(variables('openshiftInfraHostname'), '-', copyIndex())]"
+					},
+					"newStorageAccountOs": {
+						"value": "[variables('newStorageAccountGluster')]"
+					},
+					"newStorageAccountData": {
+						"value": "[variables('newStorageAccountGluster')]"
+					},
+					"apiVersionStorage": {
+						"value": "[variables('apiVersionStorage')]"
+					},
+					"apiVersionCompute": {
+						"value": "[variables('apiVersionCompute')]"
+					}
+				}
+			}
+		},
+		{
 			"type": "Microsoft.Compute/virtualMachines/extensions",
 			"name": "[concat(variables('openshiftMasterHostname'), '-', copyIndex(), '/deployOpenShift')]",
 			"location": "[variables('location')]",
@@ -1275,6 +1399,37 @@
 				}
 			}
 		}, {
+			"type": "Microsoft.Compute/virtualMachines/extensions",
+			"name": "[concat(variables('openshiftGlusterHostname'), '-', copyIndex(), '/prepNodes')]",
+			"location": "[variables('location')]",
+			"apiVersion": "[variables('apiVersionCompute')]",
+			"tags": {
+				"displayName": "PrepGluster"
+			},
+			"dependsOn": [
+				"[concat('glusterVmDeployment', copyindex())]"
+			],
+			"copy": {
+				"name": "glusterPrepLoop",
+				"count": "[parameters('glusterInstanceCount')]"
+			},
+			"properties": {
+
+  "publisher": "Microsoft.OSTCExtensions",
+        "type": "CustomScriptForLinux",
+        "typeHandlerVersion": "1.5",
+
+				"autoUpgradeMinorVersion": true,
+				"settings": {
+					"fileUris": [
+						"[variables('nodePrepScriptUrl')]"
+					]
+				},
+				"protectedSettings": {
+					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'))]"
+				}
+			}
+		},{
 			"type": "Microsoft.Compute/virtualMachines/extensions",
 			"name": "[concat(variables('openshiftNodeHostname'), '-', copyIndex(), '/prepNodes')]",
 			"location": "[variables('location')]",
@@ -1352,6 +1507,9 @@
 					"openshiftInfraHostname": {
 						"value": "[variables('openshiftInfraHostname')]"
 					},
+					"openshiftGlusterHostname": {
+						"value": "[variables('openshiftGlusterHostname')]"
+					},
 					"openshiftNodeHostname": {
 						"value": "[variables('openshiftNodeHostname')]"
 					},
@@ -1360,6 +1518,9 @@
 					},
 					"infraInstanceCount": {
 						"value": "[parameters('infraInstanceCount')]"
+					},
+					"glusterInstanceCount": {
+						"value": "[parameters('glusterInstanceCount')]"
 					},
 					"nodeInstanceCount": {
 						"value": "[parameters('nodeInstanceCount')]"
