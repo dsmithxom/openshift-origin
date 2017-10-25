@@ -1096,7 +1096,7 @@
 			"apiVersion": "[variables('apiVersionLinkTemplate')]",
 			"dependsOn": [
 				"[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountPersistentVolume1'))]",
-				"[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountRegistry'))]"
+				"[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountRegistry'))]",
 
 
 
