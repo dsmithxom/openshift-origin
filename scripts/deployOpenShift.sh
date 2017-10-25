@@ -174,6 +174,7 @@ new_nodes
 glusterfs
 
 
+
 # Set variables common for all OSEv3 hosts
 [OSEv3:vars]
 ansible_ssh_user=$SUDOUSER
@@ -206,6 +207,8 @@ openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 
 # Enable CNS (glusterfs) as default storage provider
 openshift_storage_glusterfs_namespace=glusterfs
 openshift_storage_glusterfs_name=storage
+openshift_hosted_registry_storage_kind=glusterfs
+
 
 # host group for masters
 [masters]
@@ -218,7 +221,7 @@ $MASTER-[0:${MASTERLOOP}]
 [master0]
 $MASTER-0
 [glusterfs]
-$MASTER-[0:${GLUSTERLOOP}] 
+$MASTER-[0:${GLUSTERLOOP}]  glusterfs_devices='[ "/dev/sdd" ]'
 
 
 # host group for nodes
@@ -241,7 +244,7 @@ done
 
 for (( c=0; c<$GLUSTERCOUNT; c++ ))
 do
-  echo "$GLUSTER-$c openshift_node_labels=\"{'type': 'infra', 'zone': 'default'}\" glusterfs_devices='[ "/dev/sdd" ]' openshift_hostname=$GLUSTER-$c" >> /etc/ansible/hosts
+  echo "$GLUSTER-$c openshift_node_labels=\"{'type': 'infra', 'zone': 'default'}\" node=True storage=True openshift_hostname=$GLUSTER-$c" >> /etc/ansible/hosts
 done
 # Loop to add Nodes
 
