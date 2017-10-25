@@ -865,7 +865,6 @@
 			"name": "[concat(variables('masterLoadBalancerName'), '/', 'SSH-', variables('openshiftMasterHostname'), copyIndex())]",
 			"location": "[variables('location')]",
 			"copy": {
-				"name": "masterLbLoop",
 				"count": "[parameters('masterInstanceCount')]"
 			},
 			"dependsOn": [
@@ -1097,10 +1096,10 @@
 			"apiVersion": "[variables('apiVersionLinkTemplate')]",
 			"dependsOn": [
 				"[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountPersistentVolume1'))]",
-				"[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountRegistry'))]",
-				"masterPrepLoop",
-				"infraPrepLoop",
-				"nodePrepLoop"
+				"[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountRegistry'))]"
+
+
+
 			],
 			"properties": {
 				"mode": "Incremental",
