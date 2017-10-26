@@ -221,7 +221,7 @@ $MASTER-[0:${MASTERLOOP}]
 [master0]
 $MASTER-0
 [glusterfs]
-$MASTER-[0:${GLUSTERLOOP}]  glusterfs_devices='[ "/dev/sdd" ]'
+$GLUSTER-[0:${GLUSTERLOOP}]  glusterfs_devices='[ "/dev/sdd" ]'
 
 
 # host group for nodes
