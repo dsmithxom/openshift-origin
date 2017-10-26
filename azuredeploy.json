@@ -1468,7 +1468,8 @@
 				"[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountRegistry'))]",
 				"masterPrepLoop",
 				"infraPrepLoop",
-				"nodePrepLoop"
+				"nodePrepLoop",
+				"glusterPrepLoop"
 			],
 			"properties": {
 				"mode": "Incremental",
