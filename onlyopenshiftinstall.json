@@ -1091,13 +1091,48 @@
 				}
 			}
 		},
+
+
+		, {
+			"type": "Microsoft.Compute/virtualMachines/extensions",
+			"name": "[concat(variables('openshiftGlusterHostname'), '-', copyIndex(), '/prepNodes')]",
+			"location": "[variables('location')]",
+			"apiVersion": "[variables('apiVersionCompute')]",
+			"tags": {
+				"displayName": "PrepGluster"
+			},
+			"dependsOn": [
+				"[concat('glusterVmDeployment', copyindex())]"
+			],
+			"copy": {
+				"name": "glusterPrepLoop",
+				"count": "[parameters('glusterInstanceCount')]"
+			},
+			"properties": {
+
+  "publisher": "Microsoft.OSTCExtensions",
+        "type": "CustomScriptForLinux",
+        "typeHandlerVersion": "1.5",
+
+				"autoUpgradeMinorVersion": true,
+				"settings": {
+					"fileUris": [
+						"[variables('nodePrepScriptUrl')]"
+					]
+				},
+				"protectedSettings": {
+					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'))]"
+				}
+			}
+		}, 
  {
 			"name": "OpenShiftDeployment",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "[variables('apiVersionLinkTemplate')]",
 			"dependsOn": [
 				"[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountPersistentVolume1'))]",
-				"[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountRegistry'))]"
+				"[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountRegistry'))]",
+				"glusterPrepLoop"
 			],
 			"properties": {
 				"mode": "Incremental",
