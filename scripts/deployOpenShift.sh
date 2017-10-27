@@ -221,9 +221,16 @@ $MASTER-[0:${MASTERLOOP}]
 [master0]
 $MASTER-0
 [glusterfs]
-$GLUSTER-[0:${GLUSTERLOOP}]  glusterfs_devices='[ "/dev/sdd" ]'
+EOF
+
+for (( c=0; c<$GLUSTERCOUNT; c++ ))
+do
+devicename=$(ssh  $GLUSTER-$c sudo parted -m /dev/sda print all 2>/dev/null | grep unknown | grep /dev/sd | cut -d':' -f1  | awk 'NR==1')
+echo "$GLUSTER-$c  glusterfs_devices='[ "$devicename" ]' >> /etc/ansible/hosts"
+done
 
 
+cat >> /etc/ansible/hosts <<EOF
 # host group for nodes
 [nodes]
 EOF
