@@ -46,6 +46,13 @@ sed -i -e "s/^# control_path = %(directory)s\/%%h-%%r/control_path = %(directory
 sed -i -e "s/^#host_key_checking = False/host_key_checking = False/" /etc/ansible/ansible.cfg
 sed -i -e "s/^#pty=False/pty=False/" /etc/ansible/ansible.cfg
 
+echo "[all]" > /etc/ansible/glusterhosts
+
+for (( c=0; c<$GLUSTERCOUNT; c++ ))
+do
+echo "$GLUSTER-$c " >> /etc/ansible/glusterhosts
+done
+chmod 777  /etc/ansible/glusterhosts
 # Create playbook to update ansible.cfg file
 
 cat > updateansiblecfg.yaml <<EOF
@@ -225,9 +232,7 @@ EOF
 
 for (( c=0; c<$GLUSTERCOUNT; c++ ))
 do
-runuser -l $SUDOUSER -c "ssh -i /home/$SUDOUSER/.ssh/id_rsa $SUDOUSER@$GLUSTER-$c sudo parted -m /dev/sda print all 2>/dev/null | grep unknown | grep /dev/sd | cut -d':' -f1  | awk 'NR==1'"
-
-devicename=$(runuser -l $SUDOUSER -c "ssh -i /home/$SUDOUSER/.ssh/id_rsa $SUDOUSER@$GLUSTER-$c sudo parted -m /dev/sda print all 2>/dev/null | grep unknown | grep /dev/sd | cut -d':' -f1  | awk 'NR==1'")
+devicename=$(ansible --become -u $SUDOUSER  --inventory=/etc/ansible/glusterhosts $GLUSTER-$c -m "shell" -a "parted -m /dev/sda print all 2>/dev/null | grep unknown | grep /dev/sd | cut -d':' -f1 | awk 'NR==1' "  --private-key=/home/$SUDOUSER/.ssh/id_rsa |  awk 'NR==2')
 echo "ARGGGG $devicename"
 echo "$GLUSTER-$c  glusterfs_devices='[ \"$devicename\" ]' " >> /etc/ansible/hosts
 done
