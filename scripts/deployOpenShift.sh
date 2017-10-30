@@ -225,7 +225,9 @@ EOF
 
 for (( c=0; c<$GLUSTERCOUNT; c++ ))
 do
-devicename=$(runuser -l $SUDOUSER -c "ssh -i ~/.ssh/id_rsa $GLUSTER-$c sudo parted -m /dev/sda print all 2>/dev/null | grep unknown | grep /dev/sd | cut -d':' -f1  | awk 'NR==1'")
+runuser -l $SUDOUSER -c "ssh -i /home/$SUDOUSER/.ssh/id_rsa $SUDOUSER@$GLUSTER-$c sudo parted -m /dev/sda print all 2>/dev/null | grep unknown | grep /dev/sd | cut -d':' -f1  | awk 'NR==1'
+
+devicename=$(runuser -l $SUDOUSER -c "ssh -i /home/$SUDOUSER/.ssh/id_rsa $SUDOUSER@$GLUSTER-$c sudo parted -m /dev/sda print all 2>/dev/null | grep unknown | grep /dev/sd | cut -d':' -f1  | awk 'NR==1'")
 echo "ARGGGG $devicename"
 echo "$GLUSTER-$c  glusterfs_devices='[ \"$devicename\" ]' " >> /etc/ansible/hosts
 done
