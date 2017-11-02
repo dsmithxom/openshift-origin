@@ -217,6 +217,66 @@ openshift_storage_glusterfs_name=storage
 openshift_hosted_registry_storage_kind=glusterfs
 
 
+# Enable API service auditing
+openshift_master_audit_config={"enabled": true}
+#
+# In case you want more advanced setup for the auditlog you can
+# use this line.
+# The directory in "auditFilePath" will be created if it's not
+# exist
+openshift_master_audit_config={"enabled": true, "auditFilePath": "/var/log/openpaas-oscp-audit/openpaas-oscp-audit.log", "maximumFileRetentionDays": 14, "maximumFileSizeMegabytes": 500, "maximumRetainedFiles": 5}
+
+# Enable origin repos that point at Centos PAAS SIG, defaults to true, only used
+# by deployment_type=origin
+openshift_enable_origin_repo=false
+
+##### 
+# Enable service catalog
+openshift_enable_service_catalog=true
+
+# Enable template service broker (requires service catalog to be enabled, above)
+template_service_broker_install=true
+
+# Configure one of more namespaces whose templates will be served by the TSB
+openshift_template_service_broker_namespaces=['openshift']
+
+# Configure the multi-tenant SDN plugin (default is 'redhat/openshift-ovs-subnet')
+os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
+
+# Disable the OpenShift SDN plugin
+openshift_use_openshift_sdn=true
+
+#### enable extras
+openshift_hosted_prometheus_deploy=true
+openshift_prometheus_storage_volume_name=prometheus
+openshift_prometheus_storage_volume_size=10Gi
+openshift_prometheus_storage_labels={'storage': 'prometheus'}
+openshift_prometheus_storage_type='pvc'
+openshift_prometheus_alertmanager_storage_volume_name=prometheus-alertmanager
+openshift_prometheus_alertmanager_storage_volume_size=10Gi
+openshift_prometheus_alertmanager_storage_labels={'storage': 'prometheus-alertmanager'}
+openshift_prometheus_alertmanager_storage_type='pvc'
+openshift_prometheus_alertbuffer_storage_volume_name=prometheus-alertbuffer
+openshift_prometheus_alertbuffer_storage_volume_size=10Gi
+openshift_prometheus_alertbuffer_storage_labels={'storage': 'prometheus-alertbuffer'}
+openshift_prometheus_alertbuffer_storage_type='pvc
+
+### Metrics #####
+
+openshift_metrics_install_metrics=true
+openshift_metrics_cassandra_storage_type=dynamic
+openshift_metrics_cassandra_pvc_size=10Gi
+openshift_metrics_storage_volume_size=10Gi
+
+
+openshift_metrics_install_metrics=true 
+### logging #####
+openshift_logging_install_logging=true
+openshift_logging_es_pvc_size=20Gi
+
+
+osn_storage_plugin_deps=['glusterfs']
+
 # host group for masters
 [masters]
 $MASTER-[0:${MASTERLOOP}]
