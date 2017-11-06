@@ -228,7 +228,7 @@ openshift_master_audit_config={"enabled": true, "auditFilePath": "/var/log/openp
 
 # Enable origin repos that point at Centos PAAS SIG, defaults to true, only used
 # by deployment_type=origin
-openshift_enable_origin_repo=false
+openshift_enable_origin_repo=true
 
 ##### 
 # Enable service catalog
@@ -259,7 +259,7 @@ openshift_prometheus_alertmanager_storage_type='pvc'
 openshift_prometheus_alertbuffer_storage_volume_name=prometheus-alertbuffer
 openshift_prometheus_alertbuffer_storage_volume_size=10Gi
 openshift_prometheus_alertbuffer_storage_labels={'storage': 'prometheus-alertbuffer'}
-openshift_prometheus_alertbuffer_storage_type='pvc
+openshift_prometheus_alertbuffer_storage_type='pvc'
 
 ### Metrics #####
 

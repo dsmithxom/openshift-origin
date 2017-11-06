@@ -24,7 +24,8 @@ then
    echo $(date) " - Installing Ansible and pyOpenSSL"
    yum -y --enablerepo=epel install ansible pyOpenSSL
 fi
-
+## install jabva
+yum -y install java-1.8.0-openjdk-headless
 # Install Docker 1.12.x
 echo $(date) " - Installing Docker 1.12.x"
 
