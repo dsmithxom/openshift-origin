@@ -247,25 +247,24 @@ os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
 openshift_use_openshift_sdn=true
 
 #### enable extras
-openshift_hosted_prometheus_deploy=true
-openshift_prometheus_image_prefix: "openshift/"
-openshift_prometheus_image_version: "v2.0.0-dev.3"
-openshift_prometheus_proxy_image_version: "v1.0.0"
-openshift_prometheus_alertmanager_image_version: "v0.9.1"
-openshift_prometheus_alertbuffer_image_version: "v0.0.2"
-
-openshift_prometheus_storage_volume_name=prometheus
-openshift_prometheus_storage_volume_size=10Gi
-openshift_prometheus_storage_labels={'storage': 'prometheus'}
-openshift_prometheus_storage_type='pvc'
-openshift_prometheus_alertmanager_storage_volume_name=prometheus-alertmanager
-openshift_prometheus_alertmanager_storage_volume_size=10Gi
-openshift_prometheus_alertmanager_storage_labels={'storage': 'prometheus-alertmanager'}
-openshift_prometheus_alertmanager_storage_type='pvc'
-openshift_prometheus_alertbuffer_storage_volume_name=prometheus-alertbuffer
-openshift_prometheus_alertbuffer_storage_volume_size=10Gi
-openshift_prometheus_alertbuffer_storage_labels={'storage': 'prometheus-alertbuffer'}
-openshift_prometheus_alertbuffer_storage_type='pvc'
+#openshift_hosted_prometheus_deploy=true
+#openshift_prometheus_image_prefix: "openshift/"
+#openshift_prometheus_image_version: "v2.0.0-dev.3"
+#openshift_prometheus_proxy_image_version: "v1.0.0"
+#openshift_prometheus_alertmanager_image_version: "v0.9.1"
+#openshift_prometheus_alertbuffer_image_version: "v0.0.2"
+#openshift_prometheus_storage_volume_name=prometheus
+#openshift_prometheus_storage_volume_size=10Gi
+#openshift_prometheus_storage_labels={'storage': 'prometheus'}
+#openshift_prometheus_storage_type='pvc'
+#openshift_prometheus_alertmanager_storage_volume_name=prometheus-alertmanager
+#openshift_prometheus_alertmanager_storage_volume_size=10Gi
+#openshift_prometheus_alertmanager_storage_labels={'storage': 'prometheus-alertmanager'}
+#openshift_prometheus_alertmanager_storage_type='pvc'
+#openshift_prometheus_alertbuffer_storage_volume_name=prometheus-alertbuffer
+#openshift_prometheus_alertbuffer_storage_volume_size=10Gi
+#openshift_prometheus_alertbuffer_storage_labels={'storage': 'prometheus-alertbuffer'}
+#openshift_prometheus_alertbuffer_storage_type='pvc'
 
 ### Metrics #####
 
