@@ -235,7 +235,7 @@ openshift_enable_origin_repo=true
 #openshift_enable_service_catalog=true
 
 # Enable template service broker (requires service catalog to be enabled, above)
-template_service_broker_install=true
+#template_service_broker_install=true
 
 # Configure one of more namespaces whose templates will be served by the TSB
 openshift_template_service_broker_namespaces=['openshift']
