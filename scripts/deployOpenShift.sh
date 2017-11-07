@@ -232,7 +232,7 @@ openshift_enable_origin_repo=true
 
 ##### 
 # Enable service catalog
-openshift_enable_service_catalog=true
+#openshift_enable_service_catalog=true
 
 # Enable template service broker (requires service catalog to be enabled, above)
 template_service_broker_install=true
