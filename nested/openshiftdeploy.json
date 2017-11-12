@@ -163,6 +163,34 @@
 			"metadata": {
 				"description": "SSH private key for deploying OpenShift"
 			}
+		},
+		"httpProxy": {
+			"type": "string",
+			"minLength": 1,
+			"metadata": {
+				"description": "Proxy url"
+			}
+		},
+		"httpProxyPort": {
+			"type": "string",
+			"minLength": 1,
+			"metadata": {
+				"description": "Proxy url port"
+			}
+		},
+		"httpProxyUser": {
+			"type": "string",
+			"minLength": 1,
+			"metadata": {
+				"description": "Proxy url user"
+			}
+		},
+		"httpProxyPass": {
+			"type": "string",
+			"minLength": 1,
+			"metadata": {
+				"description": "Proxy Password"
+			}
 		}
 	},
 	"variables": {
@@ -195,7 +223,7 @@
 				]
 			},
 			"protectedSettings": {
-				"commandToExecute": "[concat('bash ', variables('openshiftDeploymentScriptFileName'), ' \"', parameters('adminUsername'), '\" ', variables('singlequote'), parameters('openshiftPassword'), variables('singlequote'), ' \"', parameters('sshPrivateKey'), '\" \"', parameters('openshiftMasterHostname'), '\" \"', parameters('openshiftMasterPublicIpFqdn'), '\" \"', parameters('openshiftMasterPublicIpAddress'), '\" \"', parameters('openshiftInfraHostname'), '\" \"', parameters('openshiftNodeHostname'), '\" \"', parameters('nodeInstanceCount'), '\" \"', parameters('infraInstanceCount'), '\" \"', parameters('MasterInstanceCount'), '\" \"', parameters(parameters('subDomainChosen')), '\" \"', parameters('newStorageAccountRegistry'), '\" ', variables('singlequote'), parameters('newStorageAccountKey'), variables('singlequote'), ' ', variables('singlequote'), variables('tenantId'), variables('singlequote'), ' ', variables('singlequote'), variables('subscriptionId'), variables('singlequote'), ' ', variables('singlequote'), parameters('aadClientId'), variables('singlequote'), ' ', variables('singlequote'), parameters('aadClientSecret'), variables('singlequote'), ' ', variables('singlequote'), variables('resourceGroupName'), variables('singlequote'), ' ', variables('singlequote'), variables('location'), variables('singlequote'), ' ', variables('singlequote'), parameters('newStorageAccountPersistentVolume1'), variables('singlequote'), ' ', variables('singlequote'), parameters('newStorageAccountPV1Key'), variables('singlequote'),' ', variables('singlequote'), parameters('glusterInstanceCount'), variables('singlequote'),' ', variables('singlequote'), parameters('openshiftGlusterHostname'), variables('singlequote'))]"
+				"commandToExecute": "[concat('bash ', variables('openshiftDeploymentScriptFileName'), ' \"', parameters('adminUsername'), '\" ', variables('singlequote'), parameters('openshiftPassword'), variables('singlequote'), ' \"', parameters('sshPrivateKey'), '\" \"', parameters('openshiftMasterHostname'), '\" \"', parameters('openshiftMasterPublicIpFqdn'), '\" \"', parameters('openshiftMasterPublicIpAddress'), '\" \"', parameters('openshiftInfraHostname'), '\" \"', parameters('openshiftNodeHostname'), '\" \"', parameters('nodeInstanceCount'), '\" \"', parameters('infraInstanceCount'), '\" \"', parameters('MasterInstanceCount'), '\" \"', parameters(parameters('subDomainChosen')), '\" \"', parameters('newStorageAccountRegistry'), '\" ', variables('singlequote'), parameters('newStorageAccountKey'), variables('singlequote'), ' ', variables('singlequote'), variables('tenantId'), variables('singlequote'), ' ', variables('singlequote'), variables('subscriptionId'), variables('singlequote'), ' ', variables('singlequote'), parameters('aadClientId'), variables('singlequote'), ' ', variables('singlequote'), parameters('aadClientSecret'), variables('singlequote'), ' ', variables('singlequote'), variables('resourceGroupName'), variables('singlequote'), ' ', variables('singlequote'), variables('location'), variables('singlequote'), ' ', variables('singlequote'), parameters('newStorageAccountPersistentVolume1'), variables('singlequote'), ' ', variables('singlequote'), parameters('newStorageAccountPV1Key'), variables('singlequote'),' ', variables('singlequote'), parameters('glusterInstanceCount'), variables('singlequote'),' ', variables('singlequote'), parameters('openshiftGlusterHostname'), variables('singlequote'),' ', variables('singlequote'), parameters('httpProxy'), variables('singlequote'),' ', variables('singlequote'), parameters('httpProxyPort'), variables('singlequote'),' ', variables('singlequote'), parameters('httpProxyUser'), variables('singlequote'),' ', variables('singlequote'), parameters('httpProxyPass'), variables('singlequote'))]"
 			}
 		}
 	}],

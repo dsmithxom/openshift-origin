@@ -1364,7 +1364,7 @@
 					]
 				},
 				"protectedSettings": {
-					"commandToExecute": "[concat('bash ', variables('masterPrepScriptFileName'), ' ', variables('newStorageAccountPersistentVolume1'), ' ', parameters('adminUsername'))]"
+					"commandToExecute": "[concat('bash ', variables('masterPrepScriptFileName'), ' ', variables('newStorageAccountPersistentVolume1'), ' ', parameters('adminUsername'), ' ', parameters('httpProxy'), ' ', parameters('httpProxyPort'), ' ', parameters('httpProxyUser'), ' ', parameters('httpProxyPass'))]"
 				}
 			}
 		}, {
@@ -1395,7 +1395,7 @@
 					]
 				},
 				"protectedSettings": {
-					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'))]"
+					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'), ' ', parameters('httpProxy'), ' ', parameters('httpProxyPort'), ' ', parameters('httpProxyUser'), ' ', parameters('httpProxyPass') )]"
 				}
 			}
 		}, {
@@ -1426,7 +1426,7 @@
 					]
 				},
 				"protectedSettings": {
-					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'))]"
+					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'),' ', parameters('httpProxy'), ' ', parameters('httpProxyPort'), ' ', parameters('httpProxyUser'), ' ', parameters('httpProxyPass'))]"
 				}
 			}
 		},{
@@ -1456,7 +1456,7 @@
 					]
 				},
 				"protectedSettings": {
-					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'))]"
+					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'),' ', parameters('httpProxy'), ' ', parameters('httpProxyPort'), ' ', parameters('httpProxyUser'), ' ', parameters('httpProxyPass'))]"
 				}
 			}
 		}, {
@@ -1554,7 +1554,19 @@
 							},
 							"secretName": "[parameters('keyVaultSecret')]"
 						}
-					}
+					},
+				"httpProxy": {
+					"value": "[parameters('httpProxy')]"
+				}, 
+				"httpProxyPort": {
+					"value": "[parameters('httpProxyPort')]"
+				}, 
+				"httpProxyUser": {
+					"value": "[parameters('httpProxyUser')]"
+				}, 
+				"httpProxyPass": {
+					"value": "[parameters('httpProxyPass')]"
+				}
 				}
 			}
 		}

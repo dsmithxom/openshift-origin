@@ -58,6 +58,18 @@
 		},
 		"defaultSubDomain": {
 			"value": "changeme"
+		},
+		"httpProxy": {
+			"value": "changeme"
+		},
+		"httpProxyPort": {
+			"value": "changeme"
+		},
+		"httpProxyUser": {
+			"value": "changeme"
+		},
+		"httpProxyPass": {
+			"value": "changeme"
 		}
 	}
 }

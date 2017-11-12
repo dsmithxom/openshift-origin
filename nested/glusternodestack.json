@@ -90,7 +90,39 @@
 			"metadata": {
 				"description": "Compute API Version"
 			}
+		},
+		"httpProxy": {
+			"type": "string",
+			"minLength": 1,
+			"metadata": {
+				"description": "Proxy Url"
+			}
+		},
+		
+		"httpProxyPort": {
+			"type": "string",
+			"minLength": 1,
+			"metadata": {
+				"description": "Proxy Port"
+			}
+		},
+		
+		"httpProxyUser": {
+			"type": "string",
+			"minLength": 1,
+			"metadata": {
+				"description": "Proxy User"
+			}
+		},
+		
+		"httpProxyPass": {
+			"type": "string",
+			"minLength": 1,
+			"metadata": {
+				"description": "Proxy Pass"
+			}
 		}
+
 	},
 	"variables": {
 		"centos": { 
