@@ -29,6 +29,11 @@ SAKEY1=${22}
 GLUSTERCOUNT=${23}
 GLUSTER=${24}
 
+HTTP_PROXY=$25
+HTTP_PROXY_PORT=$26
+HTTP_PROXY_USER=$27
+HTTP_PROXY_PASS=$28
+
 MASTERLOOP=$((MASTERCOUNT - 1))
 INFRALOOP=$((INFRACOUNT - 1))
 NODELOOP=$((NODECOUNT - 1))
@@ -184,6 +189,10 @@ glusterfs
 
 # Set variables common for all OSEv3 hosts
 [OSEv3:vars]
+openshift_http_proxy=http://$HTTP_PROXY_USER:$HTTP_PROXY_PASS@$HTTP_PROXY:$HTTP_PROXY_PORT
+openshift_https_proxy=http://$HTTP_PROXY_USER:$HTTP_PROXY_PASS@$HTTP_PROXY:$HTTP_PROXY_PORT
+openshift_no_proxy='127.0.0.1,localhost'
+
 ansible_ssh_user=$SUDOUSER
 ansible_become=yes
 openshift_install_examples=true
