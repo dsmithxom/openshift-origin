@@ -9,15 +9,15 @@ HTTP_PROXY_USER=$5
 HTTP_PROXY_PASS=$6
 
 ### configure the yum proxy settings
-echo 'proxy=http://$HTTP_PROXY_USER:$HTTP_PROXY_PASS@$HTTP_PROXY:$HTTP_PROXY_PORT' >> /etc/yum.conf
-echo 'http_caching=packages' >> /etc/yum.conf
+echo "proxy=http://$HTTP_PROXY_USER:$HTTP_PROXY_PASS@$HTTP_PROXY:$HTTP_PROXY_PORT" >> /etc/yum.conf
+echo "http_caching=packages" >> /etc/yum.conf
 ### configure the profile proxy setting. this is done as the /etc/environment requires a restart to take effect
-echo 'export NO_PROXY=127.0.0.1,localhost' >> /etc/profile.d/proxy.sh
-echo 'export HTTP_PROXY=http://$HTTP_PROXY_USER:$HTTP_PROXY_PASS@$HTTP_PROXY:$HTTP_PROXY_PORT' >> /etc/profile.d/proxy.sh
-echo 'export HTTPS_PROXY=http://$HTTP_PROXY_USER:$HTTP_PROXY_PASS@$HTTP_PROXY:$HTTP_PROXY_PORT' >> /etc/profile.d/proxy.sh
+echo "export NO_PROXY=127.0.0.1,localhost" >> /etc/profile.d/proxy.sh
+echo "export HTTP_PROXY=http://$HTTP_PROXY_USER:$HTTP_PROXY_PASS@$HTTP_PROXY:$HTTP_PROXY_PORT" >> /etc/profile.d/proxy.sh
+echo "export HTTPS_PROXY=http://$HTTP_PROXY_USER:$HTTP_PROXY_PASS@$HTTP_PROXY:$HTTP_PROXY_PORT" >> /etc/profile.d/proxy.sh
 ## add to system wide settings 
-echo 'export HTTP_PROXY=http://$HTTP_PROXY_USER:$HTTP_PROXY_PASS@$HTTP_PROXY:$HTTP_PROXY_PORT' >> /etc/environment
-echo 'export HTTPS_PROXY=http://$HTTP_PROXY_USER:$HTTP_PROXY_PASS@$HTTP_PROXY:$HTTP_PROXY_PORT' >> /etc/environment
+echo "export HTTP_PROXY=http://$HTTP_PROXY_USER:$HTTP_PROXY_PASS@$HTTP_PROXY:$HTTP_PROXY_PORT" >> /etc/environment
+echo "export HTTPS_PROXY=http://$HTTP_PROXY_USER:$HTTP_PROXY_PASS@$HTTP_PROXY:$HTTP_PROXY_PORT" >> /etc/environment
 
 ##  reload profile 
 source /etc/profile.d/proxy.sh

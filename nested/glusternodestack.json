@@ -93,7 +93,7 @@
 		},
 		"imagepublisher": {
 			"type": "string",
-			"defaultValue": "RedHat",
+			"defaultValue": "OpenLogic",
 			
 			"minLength": 1,
 			"metadata": {
@@ -102,7 +102,7 @@
 		},
 		"imageoffer": {
 			"type": "string",
-			"defaultValue": "RHEL",
+			"defaultValue": "CentOs",
 			
 			"minLength": 1,
 			"metadata": {
@@ -111,7 +111,7 @@
 		},
 		"imagesku": {
 			"type": "string",
-			"defaultValue": "RHEL74",
+			"defaultValue": "7.4",
 			"minLength": 1,
 			"metadata": {
 				"description": "sku"
