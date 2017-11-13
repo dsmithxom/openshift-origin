@@ -233,6 +233,40 @@
 			"metadata": {
 				"description": "Proxy Password"
 			}
+		},
+		"imagepublisher": {
+			"type": "string",
+			"defaultValue": "OpenLogic",
+			
+			"minLength": 1,
+			"metadata": {
+				"description": "Publisher"
+			}
+		},
+		"imageoffer": {
+			"type": "string",
+			"defaultValue": "CentOs",
+			
+			"minLength": 1,
+			"metadata": {
+				"description": "offer"
+			}
+		},
+		"imagesku": {
+			"type": "string",
+			"defaultValue": "7.4",
+			"minLength": 1,
+			"metadata": {
+				"description": "sku"
+			}
+		},		
+		"imageversion": {
+			"type": "string",
+			"defaultValue": "latest",
+			"minLength": 1,
+			"metadata": {
+				"description": "version"
+			}
 		}
 	},
 	"variables": {
@@ -1176,6 +1210,18 @@
 					},
 					"apiVersionCompute": {
 						"value": "[variables('apiVersionCompute')]"
+					},
+					"imagepublisher": {
+						"value": "[parameters('imagepublisher')]"
+					},
+					"imageoffer": {
+						"value": "[parameters('imageoffer')]"
+					},
+					"imagesku": {
+						"value": "[parameters('imagesku')]"
+					},
+					"imageversion": {
+						"value": "[parameters('imageversion')]"
 					}
 				}
 			}
@@ -1237,6 +1283,18 @@
 					},
 					"apiVersionCompute": {
 						"value": "[variables('apiVersionCompute')]"
+					},
+					"imagepublisher": {
+						"value": "[parameters('imagepublisher')]"
+					},
+					"imageoffer": {
+						"value": "[parameters('imageoffer')]"
+					},
+					"imagesku": {
+						"value": "[parameters('imagesku')]"
+					},
+					"imageversion": {
+						"value": "[parameters('imageversion')]"
 					}
 				}
 			}
@@ -1299,6 +1357,18 @@
 					},
 					"apiVersionCompute": {
 						"value": "[variables('apiVersionCompute')]"
+					},
+					"imagepublisher": {
+						"value": "[parameters('imagepublisher')]"
+					},
+					"imageoffer": {
+						"value": "[parameters('imageoffer')]"
+					},
+					"imagesku": {
+						"value": "[parameters('imagesku')]"
+					},
+					"imageversion": {
+						"value": "[parameters('imageversion')]"
 					}
 				}
 			}
@@ -1361,6 +1431,18 @@
 					},
 					"apiVersionCompute": {
 						"value": "[variables('apiVersionCompute')]"
+					},
+					"imagepublisher": {
+						"value": "[parameters('imagepublisher')]"
+					},
+					"imageoffer": {
+						"value": "[parameters('imageoffer')]"
+					},
+					"imagesku": {
+						"value": "[parameters('imagesku')]"
+					},
+					"imageversion": {
+						"value": "[parameters('imageversion')]"
 					}
 				}
 			}

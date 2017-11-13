@@ -90,6 +90,40 @@
 			"metadata": {
 				"description": "Compute API Version"
 			}
+		},
+		"imagepublisher": {
+			"type": "string",
+			"defaultValue": "RedHat",
+			
+			"minLength": 1,
+			"metadata": {
+				"description": "Redhat"
+			}
+		},
+		"imageoffer": {
+			"type": "string",
+			"defaultValue": "RHEL",
+			
+			"minLength": 1,
+			"metadata": {
+				"description": "offee"
+			}
+		},
+		"imagesku": {
+			"type": "string",
+			"defaultValue": "RHEL74",
+			"minLength": 1,
+			"metadata": {
+				"description": "sku"
+			}
+		},		
+		"imageversion": {
+			"type": "string",
+			"defaultValue": "latest",
+			"minLength": 1,
+			"metadata": {
+				"description": "version"
+			}
 		}
 	},
 	"variables": {
@@ -137,10 +171,10 @@
 			"storageProfile": {
 
                 "imageReference": {
-                    "publisher": "OpenLogic",
-                    "offer": "CentOS",
-                    "sku": "7.3",
-                    "version": "latest"
+                    "publisher": "[parameters('imagepublisher')]",
+                    "offer": "[parameters('imageoffer')]",
+                    "sku": "[parameters('imagesku')]",
+                    "version": "[parameters('imageversion')]"
                 },
                                 "osDisk": {
 					"name": "[concat(parameters('hostname'), 'osdisk')]",
