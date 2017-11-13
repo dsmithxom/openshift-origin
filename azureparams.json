@@ -1,0 +1,92 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+            "_artifactsLocation": {
+                    "value": "https://raw.githubusercontent.com/ivanthelad/openshift-origin/ocp-on-stack-proxy/"
+            },
+            "masterVmSize": {
+                    "value": "Standard_DS2_v2"
+            },
+            "infraVmSize": {
+                    "value": "Standard_DS2_v2"
+            },
+            "nodeVmSize": {
+                    "value": "Standard_DS2_v2"
+            },
+            "openshiftClusterPrefix": {
+                    "value": "oscp35"
+            },
+            "masterInstanceCount": {
+                    "value": 1
+            },
+"glusterInstanceCount": {
+                    "value": 3
+            },
+
+            "infraInstanceCount": {
+                    "value": 1
+            },
+            "nodeInstanceCount": {
+                    "value": 1
+            },
+            "dataDiskSize": {
+                    "value": 128
+            },
+            "adminUsername": {
+                    "value": "ivan"
+            },
+            "openshiftPassword": {
+                    "value": "Cat#Cat#Cat"
+            },
+            "sshPublicKey": {
+                    "value": "replacmenicely"
+            },
+            "keyVaultResourceGroup": {
+                    "value": "openshiftkey"
+            },
+            "keyVaultName": {
+                    "value": "ocpstackkey"
+            },
+            "keyVaultSecret": {
+                    "value": "sshkey"
+            },
+            "aadClientId": {
+                    "value": "ThisIsYourAzureADServicePrincipalClientID"
+            },
+            "aadClientSecret": {
+                    "value": "ThisIsYourAzureADServicePrincipalClientSecret"
+            },
+            "defaultSubDomainType": {
+                    "value": "nipio"
+            },
+            "defaultSubDomain": {
+                    "value": "domain-name-all-lowercase-if-custom-used.com"
+            },
+ "httpProxy": {
+                    "value": "myproxy"
+            },
+"httpProxyPort": {
+                    "value": "myproxyPort"
+            },
+"httpProxyUser": {
+                    "value": "myproxyUser"
+            },
+"httpProxyPass": {
+                    "value": "myproxyPass"
+            },
+            "imagepublisher": {
+                "value": "OpenLogic"
+        },
+        "imageoffer": {
+            "value": "CentOs"
+    },
+    "imagesku": {
+        "value": "7.4"
+},
+"imageversion": {
+    "value": "latest"
+}
+
+    }
+}
