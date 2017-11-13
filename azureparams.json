@@ -73,10 +73,10 @@
                     "value": "myproxyUser"
             },
 "httpProxyPass": {
-                    "value": "myproxyPass"
+                    "value": "myproxyPass222222:wq"
             },
             "imagepublisher": {
-                "value": "OpenLogic"
+                "value": "OpenLogici"
         },
         "imageoffer": {
             "value": "CentOs"
