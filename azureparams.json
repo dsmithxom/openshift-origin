@@ -64,7 +64,7 @@
                     "value": "domain-name-all-lowercase-if-custom-used.com"
             },
  "httpProxy": {
-                    "value": "myproxy"
+                    "value": "myproxyivan"
             },
 "httpProxyPort": {
                     "value": "myproxyPort"
