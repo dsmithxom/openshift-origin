@@ -267,7 +267,16 @@
 			"metadata": {
 				"description": "version"
 			}
+		}, 
+		"sshPrivateKey": {
+			"type": "string",
+			"defaultValue": "NONE",
+			"minLength": 1,
+			"metadata": {
+				"description": "Clear text prviate ssh key"
+			}
 		}
+		
 	},
 	"variables": {
 		"location": "[resourceGroup().location]",
@@ -1658,12 +1667,7 @@
 						"value": "[concat(parameters('defaultSubDomainType'), 'Domain')]"
 					},
 					"sshPrivateKey": {
-						"reference": {
-							"keyvault": {
-								"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('keyVaultResourceGroup'), '/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
-							},
-							"secretName": "[parameters('keyVaultSecret')]"
-						}
+						"value": "[parameters('sshPrivateKey')]"
 					},
 				"httpProxy": {
 					"value": "[parameters('httpProxy')]"
