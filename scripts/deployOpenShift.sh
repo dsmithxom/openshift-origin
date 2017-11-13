@@ -291,6 +291,11 @@ openshift_logging_es_pvc_size=20Gi
 
 osn_storage_plugin_deps=['glusterfs']
 
+
+## proxy settings 
+openshift_generate_no_proxy_hosts=True
+openshift_http_proxy=http://$HTTP_PROXY_USER:$HTTP_PROXY_PASS@$HTTP_PROXY:$HTTP_PROXY_PORT
+openshift_https_proxy=http://$HTTP_PROXY_USER:$HTTP_PROXY_PASS@$HTTP_PROXY:$HTTP_PROXY_PORT
 # host group for masters
 [masters]
 $MASTER-[0:${MASTERLOOP}]
