@@ -1551,9 +1551,8 @@
 			],
 			"copy": {
 				"name": "glusterPrepLoop",
-				"count": "[parameters('glusterInstanceCount')]",
-				"mode": "Serial",
-				"batchSize": 1
+				"count": "[parameters('glusterInstanceCount')]"
+
 				
 			},
 			"properties": {
