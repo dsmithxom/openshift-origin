@@ -1246,7 +1246,7 @@
 			"copy": {
 				"name": "infraVmLoop",
 				"count": "[parameters('infraInstanceCount')]",
-				"mode": "serial",
+				"mode": "Serial",
 				"batchSize": 1
 			},
 			"properties": {
@@ -1322,7 +1322,7 @@
 			"copy": {
 				"name": "nodeVmLoop",
 				"count": "[parameters('nodeInstanceCount')]",
-				"mode": "serial",
+				"mode": "Serial",
 				"batchSize": 1
 			},
 			"properties": {
@@ -1401,7 +1401,7 @@
 			"copy": {
 				"name": "glusterVmLoop",
 				"count": "[parameters('glusterInstanceCount')]",
-				"mode": "serial",
+				"mode": "Serial",
 				"batchSize": 1
 			},
 			"properties": {
@@ -1480,7 +1480,7 @@
 			"copy": {
 				"name": "masterPrepLoop",
 				"count": "[parameters('masterInstanceCount')]",
-				"mode": "serial",
+				"mode": "Serial",
 				"batchSize": 1
 			},
 			"properties": {
@@ -1515,7 +1515,7 @@
 			"copy": {
 				"name": "infraPrepLoop",
 				"count": "[parameters('infraInstanceCount')]",
-				"mode": "serial",
+				"mode": "Serial",
 				"batchSize": 1
 			},
 			"properties": {
@@ -1552,7 +1552,7 @@
 			"copy": {
 				"name": "glusterPrepLoop",
 				"count": "[parameters('glusterInstanceCount')]",
-				"mode": "serial",
+				"mode": "Serial",
 				"batchSize": 1
 			},
 			"properties": {
@@ -1588,7 +1588,7 @@
 			"copy": {
 				"name": "nodePrepLoop",
 				"count": "[parameters('nodeInstanceCount')]",
-				"mode": "serial",
+				"mode": "Serial",
 				"batchSize": 1
 
 			},
