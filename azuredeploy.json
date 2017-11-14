@@ -1467,7 +1467,7 @@
 		},
 		{
 			"type": "Microsoft.Compute/virtualMachines/extensions",
-			"name": "[concat(variables('openshiftMasterHostname'), '-', copyIndex(), '/deployOpenShift')]",
+			"name": "[concat(variables('openshiftMasterHostname'), '-', copyIndex(), '/deployOpenShift',copyIndex())]",
 			"location": "[variables('location')]",
 			"apiVersion": "[variables('apiVersionCompute')]",
 			"tags": {
@@ -1500,7 +1500,7 @@
 			}
 		}, {
 			"type": "Microsoft.Compute/virtualMachines/extensions",
-			"name": "[concat(variables('openshiftInfraHostname'), '-', copyIndex(), '/prepNodes')]",
+			"name": "[concat(variables('openshiftInfraHostname'), '-', copyIndex(), '/prepNodes',copyIndex())]",
 			"location": "[variables('location')]",
 			"apiVersion": "[variables('apiVersionCompute')]",
 			"tags": {
@@ -1536,7 +1536,7 @@
 			}
 		}, {
 			"type": "Microsoft.Compute/virtualMachines/extensions",
-			"name": "[concat(variables('openshiftGlusterHostname'), '-', copyIndex(), '/prepNodes')]",
+			"name": "[concat(variables('openshiftGlusterHostname'), '-', copyIndex(), '/prepNodes',copyIndex())]",
 			"location": "[variables('location')]",
 			"apiVersion": "[variables('apiVersionCompute')]",
 			"tags": {
@@ -1544,16 +1544,17 @@
 			},
 			"dependsOn": [
 				"masterVmLoop",
+				
 				"glusterVmLoop",
 				"nodeVmLoop",
-				"infraVmLoop",
-				"[concat('glusterVmDeployment', copyindex())]"
+				"infraVmLoop"
 			],
 			"copy": {
 				"name": "glusterPrepLoop",
 				"count": "[parameters('glusterInstanceCount')]",
 				"mode": "Serial",
 				"batchSize": 1
+				
 			},
 			"properties": {
 
@@ -1573,16 +1574,16 @@
 			}
 		},{
 			"type": "Microsoft.Compute/virtualMachines/extensions",
-			"name": "[concat(variables('openshiftNodeHostname'), '-', copyIndex(), '/prepNodes')]",
+			"name": "[concat(variables('openshiftNodeHostname'), '-', copyIndex(), '/prepNodes',copyIndex())]",
 			"location": "[variables('location')]",
 			"apiVersion": "[variables('apiVersionCompute')]",
 			"tags": {
 				"displayName": "PrepNodes"
 			},
 			"dependsOn": [
-				"glusterVmLoop",
+				
 				"nodeVmLoop",
-				"infraVmLoop",
+			
 				"[concat('nodeVmDeployment', copyindex())]"
 			],
 			"copy": {
