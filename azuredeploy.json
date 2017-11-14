@@ -1245,7 +1245,9 @@
 			],
 			"copy": {
 				"name": "infraVmLoop",
-				"count": "[parameters('infraInstanceCount')]"
+				"count": "[parameters('infraInstanceCount')]",
+				"mode": "serial",
+				"batchSize": 1
 			},
 			"properties": {
 				"mode": "Incremental",
@@ -1319,7 +1321,9 @@
 			],
 			"copy": {
 				"name": "nodeVmLoop",
-				"count": "[parameters('nodeInstanceCount')]"
+				"count": "[parameters('nodeInstanceCount')]",
+				"mode": "serial",
+				"batchSize": 1
 			},
 			"properties": {
 				"mode": "Incremental",
@@ -1393,7 +1397,9 @@
 			],
 			"copy": {
 				"name": "glusterVmLoop",
-				"count": "[parameters('glusterInstanceCount')]"
+				"count": "[parameters('glusterInstanceCount')]",
+				"mode": "serial",
+				"batchSize": 1
 			},
 			"properties": {
 				"mode": "Incremental",
@@ -1469,7 +1475,9 @@
 			],
 			"copy": {
 				"name": "masterPrepLoop",
-				"count": "[parameters('masterInstanceCount')]"
+				"count": "[parameters('masterInstanceCount')]",
+				"mode": "serial",
+				"batchSize": 1
 			},
 			"properties": {
 
@@ -1499,7 +1507,9 @@
 			],
 			"copy": {
 				"name": "infraPrepLoop",
-				"count": "[parameters('infraInstanceCount')]"
+				"count": "[parameters('infraInstanceCount')]",
+				"mode": "serial",
+				"batchSize": 1
 			},
 			"properties": {
 
@@ -1530,7 +1540,9 @@
 			],
 			"copy": {
 				"name": "glusterPrepLoop",
-				"count": "[parameters('glusterInstanceCount')]"
+				"count": "[parameters('glusterInstanceCount')]",
+				"mode": "serial",
+				"batchSize": 1
 			},
 			"properties": {
 
@@ -1561,7 +1573,10 @@
 			],
 			"copy": {
 				"name": "nodePrepLoop",
-				"count": "[parameters('nodeInstanceCount')]"
+				"count": "[parameters('nodeInstanceCount')]",
+				"mode": "serial",
+				"batchSize": 1
+
 			},
 			"properties": {
   "publisher": "Microsoft.OSTCExtensions",
