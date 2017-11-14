@@ -1393,7 +1393,10 @@
 			"dependsOn": [
 				"[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountGluster'))]",
 				"glusterNicLoop",
-				"glusteravailabilityset"
+				"glusteravailabilityset",
+				"nodeVmLoop",
+				"masterVmLoop",
+				"infraVmLoop"
 			],
 			"copy": {
 				"name": "glusterVmLoop",
@@ -1471,6 +1474,7 @@
 				"displayName": "PrepMaster"
 			},
 			"dependsOn": [
+				"masterVmLoop",
 				"[concat('masterVmDeployment', copyindex())]"
 			],
 			"copy": {
@@ -1503,6 +1507,9 @@
 				"displayName": "PrepInfra"
 			},
 			"dependsOn": [
+				"glusterVmLoop",
+				"nodeVmLoop",
+				"infraVmLoop",
 				"[concat('infraVmDeployment', copyindex())]"
 			],
 			"copy": {
@@ -1536,6 +1543,10 @@
 				"displayName": "PrepGluster"
 			},
 			"dependsOn": [
+				"masterVmLoop",
+				"glusterVmLoop",
+				"nodeVmLoop",
+				"infraVmLoop",
 				"[concat('glusterVmDeployment', copyindex())]"
 			],
 			"copy": {
@@ -1569,6 +1580,9 @@
 				"displayName": "PrepNodes"
 			},
 			"dependsOn": [
+				"glusterVmLoop",
+				"nodeVmLoop",
+				"infraVmLoop",
 				"[concat('nodeVmDeployment', copyindex())]"
 			],
 			"copy": {
