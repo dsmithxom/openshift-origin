@@ -1245,9 +1245,8 @@
 			],
 			"copy": {
 				"name": "infraVmLoop",
-				"count": "[parameters('infraInstanceCount')]",
-				"mode": "Serial",
-				"batchSize": 1
+				"count": "[parameters('infraInstanceCount')]"
+		
 			},
 			"properties": {
 				"mode": "Incremental",
@@ -1321,9 +1320,8 @@
 			],
 			"copy": {
 				"name": "nodeVmLoop",
-				"count": "[parameters('nodeInstanceCount')]",
-				"mode": "Serial",
-				"batchSize": 1
+				"count": "[parameters('nodeInstanceCount')]"
+	
 			},
 			"properties": {
 				"mode": "Incremental",
@@ -1393,16 +1391,12 @@
 			"dependsOn": [
 				"[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountGluster'))]",
 				"glusterNicLoop",
-				"glusteravailabilityset",
-				"nodeVmLoop",
-				"masterVmLoop",
-				"infraVmLoop"
+				"glusteravailabilityset"
+			
 			],
 			"copy": {
 				"name": "glusterVmLoop",
-				"count": "[parameters('glusterInstanceCount')]",
-				"mode": "Serial",
-				"batchSize": 1
+				"count": "[parameters('glusterInstanceCount')]"
 			},
 			"properties": {
 				"mode": "Incremental",
@@ -1479,9 +1473,8 @@
 			],
 			"copy": {
 				"name": "masterPrepLoop",
-				"count": "[parameters('masterInstanceCount')]",
-				"mode": "Serial",
-				"batchSize": 1
+				"count": "[parameters('masterInstanceCount')]"
+			
 			},
 			"properties": {
 
@@ -1507,16 +1500,15 @@
 				"displayName": "PrepInfra"
 			},
 			"dependsOn": [
-				"glusterVmLoop",
-				"nodeVmLoop",
+
 				"infraVmLoop",
 				"[concat('infraVmDeployment', copyindex())]"
 			],
 			"copy": {
 				"name": "infraPrepLoop",
-				"count": "[parameters('infraInstanceCount')]",
-				"mode": "Serial",
-				"batchSize": 1
+				"count": "[parameters('infraInstanceCount')]"
+				
+			
 			},
 			"properties": {
 
@@ -1543,11 +1535,10 @@
 				"displayName": "PrepGluster"
 			},
 			"dependsOn": [
-				"masterVmLoop",
+			
 				
-				"glusterVmLoop",
-				"nodeVmLoop",
-				"infraVmLoop"
+				"glusterVmLoop"
+			
 			],
 			"copy": {
 				"name": "glusterPrepLoop",
@@ -1587,9 +1578,8 @@
 			],
 			"copy": {
 				"name": "nodePrepLoop",
-				"count": "[parameters('nodeInstanceCount')]",
-				"mode": "Serial",
-				"batchSize": 1
+				"count": "[parameters('nodeInstanceCount')]"
+				
 
 			},
 			"properties": {
