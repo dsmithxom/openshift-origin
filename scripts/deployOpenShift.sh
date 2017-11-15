@@ -29,16 +29,16 @@ SAKEY1=${22}
 GLUSTERCOUNT=${23}
 GLUSTER=${24}
 
-HTTP_PROXY=$25
-HTTP_PROXY_PORT=$26
-HTTP_PROXY_USER=$27
-HTTP_PROXY_PASS=$28
+HTTP_PROXY=${25}
+HTTP_PROXY_PORT=${26}
+HTTP_PROXY_USER=${27}
+HTTP_PROXY_PASS=${28}
 
 MASTERLOOP=$((MASTERCOUNT - 1))
 INFRALOOP=$((INFRACOUNT - 1))
 NODELOOP=$((NODECOUNT - 1))
 GLUSTERLOOP=$((GLUSTERCOUNT - 1))
-
+echo "ALL Params  $@ "
 # Generate private keys for use by Ansible
 echo $(date) " - Generating Private keys for use by Ansible for OpenShift Installation"
 
