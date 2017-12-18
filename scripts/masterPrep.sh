@@ -25,6 +25,10 @@ then
    yum -y --enablerepo=epel install ansible pyOpenSSL
 fi
 
+## install java
+echo $(date) " - java-1.8.0-openjdk-headles"
+
+yum -y install java-1.8.0-openjdk-headless
 # Install Docker 1.12.x
 echo $(date) " - Installing Docker 1.12.x"
 
