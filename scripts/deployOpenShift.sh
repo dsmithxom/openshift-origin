@@ -438,7 +438,7 @@ EOF
 
 echo $(date) " - Cloning openshift-ansible repo for use in installation"
 runuser -l $SUDOUSER -c "git clone https://github.com/openshift/openshift-ansible /home/$SUDOUSER/openshift-ansible "
-runuser -l $SUDOUSER -c "git --git-dir=/home/$SUDOUSER/openshift-ansible/.git checkout -b release-3.7"
+runuser -l $SUDOUSER -c "git --git-dir=/home/$SUDOUSER/openshift-ansible/.git checkout origin/release-3.7"
 
 
 echo $(date) " - Running network_manager.yml playbook" 
