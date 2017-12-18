@@ -408,12 +408,12 @@ openshift_use_openshift_sdn=true
 
 ### Metrics #####
 openshift_metrics_install_metrics=true
-openshift_metrics_cassandra_storage_type=dynamic
+openshift_metrics_cassandra_storage_type=emptydir
 openshift_metrics_cassandra_pvc_size=10Gi
 openshift_metrics_storage_volume_size=10Gi
 openshift_metrics_install_metrics=true 
 ### logging #####
-openshift_logging_install_logging=true
+openshift_logging_install_logging=false
 openshift_logging_es_pvc_size=20Gi
 
 # host group for masters
