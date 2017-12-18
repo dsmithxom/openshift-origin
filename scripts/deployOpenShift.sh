@@ -369,7 +369,7 @@ ansible_ssh_user=$SUDOUSER
 ansible_become=yes
 openshift_install_examples=true
 openshift_deployment_type=origin
-openshift_release=v3.6
+openshift_release=v3.7
 docker_udev_workaround=True
 openshift_use_dnsmasq=True
 openshift_master_default_subdomain=$ROUTING
@@ -391,6 +391,30 @@ openshift_master_cluster_public_vip=$MASTERPUBLICIPADDRESS
 
 # Enable HTPasswdPasswordIdentityProvider
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
+
+
+
+##### 
+# Enable service catalog
+openshift_enable_service_catalog=false
+# Enable template service broker (requires service catalog to be enabled, above)
+template_service_broker_install=false
+# Configure one of more namespaces whose templates will be served by the TSB
+openshift_template_service_broker_namespaces=['openshift']
+# Configure the multi-tenant SDN plugin (default is 'redhat/openshift-ovs-subnet')
+os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
+# Disable the OpenShift SDN plugin
+openshift_use_openshift_sdn=true
+
+### Metrics #####
+openshift_metrics_install_metrics=true
+openshift_metrics_cassandra_storage_type=dynamic
+openshift_metrics_cassandra_pvc_size=10Gi
+openshift_metrics_storage_volume_size=10Gi
+openshift_metrics_install_metrics=true 
+### logging #####
+openshift_logging_install_logging=true
+openshift_logging_es_pvc_size=20Gi
 
 # host group for masters
 [masters]
