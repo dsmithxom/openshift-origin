@@ -62,7 +62,7 @@ if hostname -f|grep -- "-0" >/dev/null
 then
 cat <<EOF > /home/${SUDOUSER}/scgeneric1.yml
 kind: StorageClass
-apiVersion: storage.k8s.io/v1beta1
+apiVersion: storage.k8s.io/v1
 metadata:
   name: generic
   annotations:

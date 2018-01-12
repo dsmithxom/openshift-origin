@@ -130,7 +130,7 @@ cat > /home/${SUDOUSER}/configurestorageclass.yml <<EOF
     description: "Create Storage Class"
   tasks:
   - name: Create Storage Class with StorageAccountPV1
-    shell: oc create -f /home/${SUDOUSER}/scgeneric1.yml
+    shell: oc create -f /home/${SUDOUSER}/storageClass.yml
 EOF
 
 # Create vars.yml file for use by setup-azure-config.yml playbook
@@ -142,6 +142,7 @@ g_aadClientId: $AADCLIENTID
 g_aadClientSecret: $AADCLIENTSECRET
 g_resourceGroup: $RESOURCEGROUP
 g_location: $LOCATION
+g_storageaccount: $STORAGEACCOUNT1
 EOF
 
 # Create Azure Cloud Provider configuration Playbook for Master Config
@@ -179,13 +180,13 @@ cat > /home/${SUDOUSER}/setup-azure-master.yml <<EOF
     copy:
       dest: "{{ azure_conf }}"
       content: |
-        {
-          "aadClientID" : "{{ g_aadClientId }}",
-          "aadClientSecret" : "{{ g_aadClientSecret }}",
-          "subscriptionID" : "{{ g_subscriptionId }}",
-          "tenantID" : "{{ g_tenantId }}",
-          "resourceGroup": "{{ g_resourceGroup }}",
-        } 
+          aadClientId : {{ g_aadClientId }}
+          aadClientSecret : {{ g_aadClientSecret }}
+          subscriptionId : {{ g_subscriptionId }}
+          tenantID : {{ g_tenantId }}
+          aadTenantID : {{ g_tenantId }}
+          resourceGroup: {{ g_resourceGroup }}
+          location: {{ g_location }}
     notify:
     - restart origin-master-api
     - restart origin-master-controllers
@@ -245,13 +246,13 @@ cat > /home/${SUDOUSER}/setup-azure-node-master.yml <<EOF
     copy:
       dest: "{{ azure_conf }}"
       content: |
-        {
-          "aadClientID" : "{{ g_aadClientId }}",
-          "aadClientSecret" : "{{ g_aadClientSecret }}",
-          "subscriptionID" : "{{ g_subscriptionId }}",
-          "tenantID" : "{{ g_tenantId }}",
-          "resourceGroup": "{{ g_resourceGroup }}",
-        } 
+          aadClientId : {{ g_aadClientId }}
+          aadClientSecret : {{ g_aadClientSecret }}
+          subscriptionId : {{ g_subscriptionId }}
+          tenantID : {{ g_tenantId }}
+          aadTenantID : {{ g_tenantId }}
+          resourceGroup: {{ g_resourceGroup }}
+          location: {{ g_location }}
     notify:
     - restart origin-node
   - name: insert the azure disk config into the node
@@ -300,13 +301,13 @@ cat > /home/${SUDOUSER}/setup-azure-node.yml <<EOF
     copy:
       dest: "{{ azure_conf }}"
       content: |
-        {
-          "aadClientID" : "{{ g_aadClientId }}",
-          "aadClientSecret" : "{{ g_aadClientSecret }}",
-          "subscriptionID" : "{{ g_subscriptionId }}",
-          "tenantID" : "{{ g_tenantId }}",
-          "resourceGroup": "{{ g_resourceGroup }}",
-        } 
+          aadClientId : {{ g_aadClientId }}
+          aadClientSecret : {{ g_aadClientSecret }}
+          subscriptionId : {{ g_subscriptionId }}
+          tenantID : {{ g_tenantId }}
+          aadTenantID : {{ g_tenantId }}
+          resourceGroup: {{ g_resourceGroup }}
+          location: {{ g_location }}
     notify:
     - restart origin-node
   - name: insert the azure disk config into the node
@@ -324,31 +325,22 @@ cat > /home/${SUDOUSER}/setup-azure-node.yml <<EOF
       - azure
     notify:
     - restart origin-node
-  - name: delete the node so it can recreate itself
-    command: oc delete node {{inventory_hostname}}
-    delegate_to: ${MASTER}-0
-  - name: sleep to let node come back to life
-    pause:
-       seconds: 90
 EOF
 
-# Create Playbook to delete stuck Master nodes and set as not schedulable
 
-cat > /home/${SUDOUSER}/deletestucknodes.yml <<EOF
-- hosts: masters
-  gather_facts: no
-  become: yes
-  vars:
-    description: "Delete stuck nodes"
-  tasks:
-  - name: Delete stuck nodes so it can recreate itself
-    command: oc delete node {{inventory_hostname}}
-    delegate_to: ${MASTER}-0
-  - name: sleep between deletes
-    pause:
-      seconds: 25
-  - name: set masters as unschedulable
-    command: oadm manage-node {{inventory_hostname}} --schedulable=false
+# moved storage Class creation here 
+
+cat <<EOF > /home/${SUDOUSER}/storageClass.yml
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: disk
+  annotations:
+    storageclass.beta.kubernetes.io/is-default-class: "true"
+provisioner: kubernetes.io/azure-disk
+parameters:
+  location: ${LOCATION}
+  storageAccount: ${STORAGEACCOUNT1}
 EOF
 
 # Create Ansible Hosts File
@@ -407,11 +399,11 @@ os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
 openshift_use_openshift_sdn=true
 
 ### Metrics #####
-openshift_metrics_install_metrics=true
+openshift_metrics_install_metrics=false
 openshift_metrics_cassandra_storage_type=emptydir
 openshift_metrics_cassandra_pvc_size=10Gi
 openshift_metrics_storage_volume_size=10Gi
-openshift_metrics_install_metrics=true 
+openshift_metrics_install_metrics=false 
 ### logging #####
 openshift_logging_install_logging=false
 openshift_logging_es_pvc_size=20Gi
@@ -530,9 +522,9 @@ sleep 120
 # Execute setup-azure-master and setup-azure-node playbooks to configure Azure Cloud Provider
 echo $(date) "- Configuring OpenShift Cloud Provider to be Azure"
 
-#runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-master.yml"
-#runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node-master.yml"
-#runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node.yml"
+runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-master.yml"
+runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node-master.yml"
+runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node.yml"
 #runuser -l $SUDOUSER -c "ansible-playbook ~/deletestucknodes.yml"
 
 # Delete postinstall files
