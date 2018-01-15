@@ -230,11 +230,6 @@ cat > /home/${SUDOUSER}/setup-azure-node-master.yml <<EOF
     azure_conf_dir: /etc/azure
     azure_conf: "{{ azure_conf_dir }}/azure.conf"
     node_conf: /etc/origin/node/node-config.yaml
-  handlers:
-  - name: restart origin-node
-    systemd:
-      state: restarted
-      name: origin-node
   post_tasks:
   - name: make sure /etc/azure exists
     file:
@@ -252,8 +247,6 @@ cat > /home/${SUDOUSER}/setup-azure-node-master.yml <<EOF
           aadTenantID : {{ g_tenantId }}
           resourceGroup: {{ g_resourceGroup }}
           location: {{ g_location }}
-    notify:
-    - restart origin-node
   - name: insert the azure disk config into the node
     modify_yaml:
       dest: "{{ node_conf }}"
@@ -267,8 +260,6 @@ cat > /home/${SUDOUSER}/setup-azure-node-master.yml <<EOF
     - key: kubeletArguments.cloud-provider
       value:
       - azure
-    notify:
-    - restart origin-node
 EOF
 
 # Create Azure Cloud Provider configuration Playbook for Node Config (Non-Master Nodes)
@@ -285,11 +276,6 @@ cat > /home/${SUDOUSER}/setup-azure-node.yml <<EOF
     azure_conf_dir: /etc/azure
     azure_conf: "{{ azure_conf_dir }}/azure.conf"
     node_conf: /etc/origin/node/node-config.yaml
-  handlers:
-  - name: restart origin-node
-    systemd:
-      state: restarted
-      name: origin-node
   post_tasks:
   - name: make sure /etc/azure exists
     file:
@@ -307,8 +293,6 @@ cat > /home/${SUDOUSER}/setup-azure-node.yml <<EOF
           aadTenantID : {{ g_tenantId }}
           resourceGroup: {{ g_resourceGroup }}
           location: {{ g_location }}
-    notify:
-    - restart origin-node
   - name: insert the azure disk config into the node
     modify_yaml:
       dest: "{{ node_conf }}"
@@ -322,8 +306,6 @@ cat > /home/${SUDOUSER}/setup-azure-node.yml <<EOF
     - key: kubeletArguments.cloud-provider
       value:
       - azure
-    notify:
-    - restart origin-node
 EOF
 
 
@@ -530,11 +512,11 @@ sleep 20
 ## restart the required service 
 echo $(date) "- Restarting ovs   "
 
-runuser -l $SUDOUSER -c  "ansible all  -m service -a 'name=openvswitch state=restarted' "
+runuser -l $SUDOUSER -c  "ansible nodes -b  -m service -a 'name=openvswitch state=restarted' "
 
-echo $(date) "- Restarting ovs   "
-
-runuser -l $SUDOUSER -c  "ansible all  -m service -a 'name=origin-node state=restarted' "
+echo $(date) "- Restarting origin nodes after 20 seconds    "
+sleep 20
+runuser -l $SUDOUSER -c  "ansible nodes -b  -m service -a 'name=origin-node state=restarted' "
 
 echo " Sleeping 60 "
 sleep 60
