@@ -118,7 +118,6 @@ cat > /home/${SUDOUSER}/dockerregistry.yml <<EOF
 EOF
 
 # Run on MASTER-0 - configure Storage Class
-
 cat > /home/${SUDOUSER}/configurestorageclass.yml <<EOF
 ---
 - hosts: master0
@@ -513,7 +512,16 @@ runuser -l $SUDOUSER -c "ansible-playbook ~/configurestorageclass.yml"
 # Configure Docker Registry to use Azure Storage Account
 echo $(date) "- Configuring Docker Registry to use Azure Storage Account"
 
-#runuser -l $SUDOUSER -c "ansible-playbook ~/dockerregistry.yml"
+runuser -l $SUDOUSER -c "ansible-playbook ~/dockerregistry.yml"
+runuser -l $SUDOUSER -c "ansible-playbook ~/dockerregistry.yml"
+
+## echo Deployong metric collection 
+echo $(date) "- Deploying metrics"
+runuser -l $SUDOUSER -c "ansible-playbook openshift-ansible/playbooks/byo/openshift-cluster/openshift-metrics.yml    -e openshift_metrics_cassandra_storage_type=pv  -e openshift_metrics_install_metrics=True"
+## echo deploying logging 
+echo $(date) "-  Deploying logging"
+
+runuser -l $SUDOUSER -c "ansible-playbook openshift-ansible/playbooks/byo/openshift-cluster/openshift-logging.yml -e openshift_logging_es_pvc_dynamic=True -e openshift_logging_es_pvc_size=100G  -e openshift_logging_install_logging=True -e openshift_logging_es_pvc_storage_class_name=disk  -e openshift_logging_storage_kind=dynamic -e openshift_logging_es_memory_limit=1G"
 
 echo $(date) "- Sleep for 120"
 
@@ -524,7 +532,19 @@ echo $(date) "- Configuring OpenShift Cloud Provider to be Azure"
 
 runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-master.yml"
 runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node-master.yml"
+
 runuser -l $SUDOUSER -c "ansible-playbook ~/setup-azure-node.yml"
+
+## restart the required service 
+echo $(date) "- Restarting ovs   "
+
+runuser -l $SUDOUSER -c  "ansible all  -m service -a 'name=openvswitch state=restarted' "
+
+echo $(date) "- Restarting ovs   "
+
+runuser -l $SUDOUSER -c  "ansible all  -m service -a 'name=origin-node state=restarted' "
+
+
 #runuser -l $SUDOUSER -c "ansible-playbook ~/deletestucknodes.yml"
 
 # Delete postinstall files
