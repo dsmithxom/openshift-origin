@@ -512,7 +512,7 @@ sleep 20
 ## restart the required service 
 echo $(date) "- Restarting ovs   "
 
-runuser -l $SUDOUSER -c  "ansible nodes -b  -m service -a 'name=openvswitch state=restarted' "
+runuser -l $SUDOUSER -c  "ansible all -b  -m service -a 'name=openvswitch state=restarted' "
 
 echo $(date) "- Restarting origin nodes after 20 seconds    "
 sleep 20
@@ -525,7 +525,7 @@ echo $(date) "- Deploying metrics"
 runuser -l $SUDOUSER -c "ansible-playbook openshift-ansible/playbooks/byo/openshift-cluster/openshift-metrics.yml    -e openshift_metrics_cassandra_storage_type=pv  -e openshift_metrics_install_metrics=True"
 ## echo deploying logging 
 echo $(date) "-  Deploying logging"
-
+sleep 20
 runuser -l $SUDOUSER -c "ansible-playbook openshift-ansible/playbooks/byo/openshift-cluster/openshift-logging.yml -e openshift_logging_es_pvc_dynamic=True -e openshift_logging_es_pvc_size=100G  -e openshift_logging_install_logging=True -e openshift_logging_es_pvc_storage_class_name=disk  -e openshift_logging_storage_kind=dynamic -e openshift_logging_es_memory_limit=1G"
 
 
