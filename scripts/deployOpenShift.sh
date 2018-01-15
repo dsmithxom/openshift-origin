@@ -526,7 +526,7 @@ runuser -l $SUDOUSER -c "ansible-playbook openshift-ansible/playbooks/byo/opensh
 ## echo deploying logging 
 echo $(date) "-  Deploying logging"
 sleep 20
-runuser -l $SUDOUSER -c "ansible-playbook openshift-ansible/playbooks/byo/openshift-cluster/openshift-logging.yml -e openshift_logging_es_pvc_dynamic=True -e openshift_logging_es_pvc_size=100G  -e openshift_logging_install_logging=True -e openshift_logging_es_pvc_storage_class_name=disk  -e openshift_logging_storage_kind=dynamic -e openshift_logging_es_memory_limit=1G"
+#runuser -l $SUDOUSER -c "nohup ansible-playbook openshift-ansible/playbooks/byo/openshift-cluster/openshift-logging.yml -e openshift_logging_es_pvc_dynamic=True -e openshift_logging_es_pvc_size=100G  -e openshift_logging_install_logging=True -e openshift_logging_es_pvc_storage_class_name=disk  -e openshift_logging_storage_kind=dynamic -e openshift_logging_es_memory_limit=1G  &>/dev/null &"
 
 
 
