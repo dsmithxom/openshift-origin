@@ -201,6 +201,8 @@
 	},
 	"variables": {
 		"location": "[resourceGroup().location]",
+		"availabilitySetPlatformFaultDomainCount": "2",
+		"availabilitySetPlatformUpdateDomainCount": "5",
 		"resourceGroupName": "[resourceGroup().id]",
 		"apiVersionCompute": "2017-03-30",
 		"apiVersionNetwork": "2016-03-30",
@@ -717,16 +719,23 @@
 			"name": "masteravailabilityset",
 			"location": "[variables('location')]",
 			"apiVersion": "[variables('apiVersionCompute')]",
-			"properties": {},
+			"properties": {
+				"platformFaultDomainCount": "[variables('availabilitySetPlatformFaultDomainCount')]",
+				"platformUpdateDomainCount": "[variables('availabilitySetPlatformUpdateDomainCount')]"
+			  },
 			"sku": {
 				"name": "Aligned"
 			  }
+
 		}, {
 			"type": "Microsoft.Compute/availabilitySets",
 			"name": "infraavailabilityset",
 			"location": "[variables('location')]",
 			"apiVersion": "[variables('apiVersionCompute')]",
-			"properties": {},
+			"properties": {
+				"platformFaultDomainCount": "[variables('availabilitySetPlatformFaultDomainCount')]",
+				"platformUpdateDomainCount": "[variables('availabilitySetPlatformUpdateDomainCount')]"
+			  },
 			"sku": {
 				"name": "Aligned"
 			  }
@@ -735,7 +744,10 @@
 			"name": "nodeavailabilityset",
 			"location": "[variables('location')]",
 			"apiVersion": "[variables('apiVersionCompute')]",
-			"properties": {},
+			"properties": {
+				"platformFaultDomainCount": "[variables('availabilitySetPlatformFaultDomainCount')]",
+				"platformUpdateDomainCount": "[variables('availabilitySetPlatformUpdateDomainCount')]"
+			  },	
 			"sku": {
 				"name": "Aligned"
 			  }
