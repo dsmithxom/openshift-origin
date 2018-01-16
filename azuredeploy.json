@@ -210,9 +210,7 @@
 		"openshiftMasterHostname": "[concat(variables('namingInfix'), '-master')]",
 		"openshiftNodeHostname": "[concat(variables('namingInfix'), '-node')]",
 		"openshiftInfraHostname": "[concat(variables('namingInfix'), '-infra')]",
-		"newStorageAccountMaster": "[concat('master', uniqueString(concat(resourceGroup().id, 'msa')))]",
-		"newStorageAccountInfra": "[concat('infra', uniqueString(concat(resourceGroup().id, 'infra')))]",
-		"newStorageAccountNodeOs": "[concat('nodeos', uniqueString(concat(resourceGroup().id, 'nodeossa')))]",
+		"storageAccountTypeData": "Standard_LRS",
 		"newStorageAccountNodeData": "[concat('nodedata', uniqueString(concat(resourceGroup().id, 'nodedatasa')))]",
 		"newStorageAccountRegistry": "[concat('registry', uniqueString(concat(resourceGroup().id, 'registry')))]",
 		"newStorageAccountPersistentVolume1": "[concat('pv1sa', uniqueString(concat(resourceGroup().id, 'persistentvolume1')))]",
@@ -664,51 +662,7 @@
 					}
 				}]
 			}
-		}, {
-			"type": "Microsoft.Storage/storageAccounts",
-			"name": "[variables('newStorageAccountMaster')]",
-			"location": "[variables('location')]",
-			"apiVersion": "[variables('apiVersionStorage')]",
-			"tags": {
-				"displayName": "MasterStorageAccount"
-			},
-			"properties": {
-				"accountType": "[variables('vmSizesMap')[parameters('masterVmSize')].storageAccountType]"
-			}
-		}, {
-			"type": "Microsoft.Storage/storageAccounts",
-			"name": "[variables('newStorageAccountInfra')]",
-			"location": "[variables('location')]",
-			"apiVersion": "[variables('apiVersionStorage')]",
-			"tags": {
-				"displayName": "InfraStorageAccount"
-			},
-			"properties": {
-				"accountType": "[variables('vmSizesMap')[parameters('infraVmSize')].storageAccountType]"
-			}
-		}, {
-			"type": "Microsoft.Storage/storageAccounts",
-			"name": "[variables('newStorageAccountNodeOs')]",
-			"location": "[variables('location')]",
-			"apiVersion": "[variables('apiVersionStorage')]",
-			"tags": {
-				"displayName": "NodeStorageAccount"
-			},
-			"properties": {
-				"accountType": "[variables('vmSizesMap')[parameters('nodeVmSize')].storageAccountType]"
-			}
-		}, {
-			"type": "Microsoft.Storage/storageAccounts",
-			"name": "[variables('newStorageAccountNodeData')]",
-			"location": "[variables('location')]",
-			"apiVersion": "[variables('apiVersionStorage')]",
-			"tags": {
-				"displayName": "NodeStorageAccount"
-			},
-			"properties": {
-				"accountType": "[variables('vmSizesMap')[parameters('nodeVmSize')].storageAccountType]"
-			}
-		}, {
+		},  {
 			"type": "Microsoft.Storage/storageAccounts",
 			"name": "[variables('newStorageAccountRegistry')]",
 			"location": "[variables('location')]",
@@ -1034,7 +988,6 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "[variables('apiVersionLinkTemplate')]",
 			"dependsOn": [
-				"[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountMaster'))]",
 				"masterNicLoop",
 				"masteravailabilityset"
 			],
@@ -1076,11 +1029,9 @@
 					"hostname": {
 						"value": "[concat(variables('openshiftMasterHostname'), '-', copyIndex())]"
 					},
-					"newStorageAccountOs": {
-						"value": "[variables('newStorageAccountMaster')]"
-					},
-					"newStorageAccountData": {
-						"value": "[variables('newStorageAccountMaster')]"
+				
+					"storageAccountTypeData ": {
+						"value": "[variables('storageAccountTypeData')]"
 					},
 					"apiVersionStorage": {
 						"value": "[variables('apiVersionStorage')]"
@@ -1095,7 +1046,6 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "[variables('apiVersionLinkTemplate')]",
 			"dependsOn": [
-				"[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountInfra'))]",
 				"infraNicLoop",
 				"infraavailabilityset"
 			],
@@ -1137,11 +1087,9 @@
 					"hostname": {
 						"value": "[concat(variables('openshiftInfraHostname'), '-', copyIndex())]"
 					},
-					"newStorageAccountOs": {
-						"value": "[variables('newStorageAccountInfra')]"
-					},
-					"newStorageAccountData": {
-						"value": "[variables('newStorageAccountInfra')]"
+
+					"storageAccountTypeData": {
+						"value": "[variables('storageAccountTypeData')]"
 					},
 					"apiVersionStorage": {
 						"value": "[variables('apiVersionStorage')]"
@@ -1156,8 +1104,7 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "[variables('apiVersionLinkTemplate')]",
 			"dependsOn": [
-				"[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountNodeOs'))]",
-				"[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountNodeData'))]",
+		
 				"nodeNicLoop",
 				"nodeavailabilityset"
 			],
@@ -1199,11 +1146,9 @@
 					"hostname": {
 						"value": "[concat(variables('openshiftNodeHostname'), '-', copyIndex())]"
 					},
-					"newStorageAccountOs": {
-						"value": "[variables('newStorageAccountNodeOs')]"
-					},
-					"newStorageAccountData": {
-						"value": "[variables('newStorageAccountNodeData')]"
+
+					"storageAccountTypeData": {
+						"value": "[variables('storageAccountTypeData')]"
 					},
 					"apiVersionStorage": {
 						"value": "[variables('apiVersionStorage')]"
