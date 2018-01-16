@@ -202,7 +202,7 @@
 	"variables": {
 		"location": "[resourceGroup().location]",
 		"resourceGroupName": "[resourceGroup().id]",
-		"apiVersionCompute": "2015-06-15",
+		"apiVersionCompute": "2017-03-30",
 		"apiVersionNetwork": "2016-03-30",
 		"apiVersionStorage": "2015-06-15",
 		"apiVersionLinkTemplate": "2015-01-01",
@@ -717,19 +717,28 @@
 			"name": "masteravailabilityset",
 			"location": "[variables('location')]",
 			"apiVersion": "[variables('apiVersionCompute')]",
-			"properties": {}
+			"properties": {},
+			"sku": {
+				"name": "Aligned"
+			  }
 		}, {
 			"type": "Microsoft.Compute/availabilitySets",
 			"name": "infraavailabilityset",
 			"location": "[variables('location')]",
 			"apiVersion": "[variables('apiVersionCompute')]",
-			"properties": {}
+			"properties": {},
+			"sku": {
+				"name": "Aligned"
+			  }
 		}, {
 			"type": "Microsoft.Compute/availabilitySets",
 			"name": "nodeavailabilityset",
 			"location": "[variables('location')]",
 			"apiVersion": "[variables('apiVersionCompute')]",
-			"properties": {}
+			"properties": {},
+			"sku": {
+				"name": "Aligned"
+			  }
 		}, {
 			"type": "Microsoft.Network/loadBalancers",
 			"name": "[variables('masterLoadBalancerName')]",
