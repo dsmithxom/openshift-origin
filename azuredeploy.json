@@ -8,7 +8,7 @@
 				"description": "The base URL where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated.",
 				"artifactsBaseUrl": ""
 			},
-			"defaultValue": "https://raw.githubusercontent.com/ivanthelad/openshift-origin/master/"
+			"defaultValue": "https://raw.githubusercontent.com/ivanthelad/openshift-origin/managed_disks/"
 		},
 		"masterVmSize": {
 			"type": "string",
@@ -1033,9 +1033,7 @@
 					"storageAccountTypeData ": {
 						"value": "[variables('storageAccountTypeData')]"
 					},
-					"apiVersionStorage": {
-						"value": "[variables('apiVersionStorage')]"
-					},
+					
 					"apiVersionCompute": {
 						"value": "[variables('apiVersionCompute')]"
 					}
@@ -1091,9 +1089,7 @@
 					"storageAccountTypeData": {
 						"value": "[variables('storageAccountTypeData')]"
 					},
-					"apiVersionStorage": {
-						"value": "[variables('apiVersionStorage')]"
-					},
+		
 					"apiVersionCompute": {
 						"value": "[variables('apiVersionCompute')]"
 					}
@@ -1150,9 +1146,7 @@
 					"storageAccountTypeData": {
 						"value": "[variables('storageAccountTypeData')]"
 					},
-					"apiVersionStorage": {
-						"value": "[variables('apiVersionStorage')]"
-					},
+			
 					"apiVersionCompute": {
 						"value": "[variables('apiVersionCompute')]"
 					}
