@@ -1051,7 +1051,7 @@
 						"value": "[concat(variables('openshiftMasterHostname'), '-', copyIndex())]"
 					},
 				
-					"storageAccountTypeData ": {
+					"storageAccountTypeData": {
 						"value": "[variables('storageAccountTypeData')]"
 					},
 					
